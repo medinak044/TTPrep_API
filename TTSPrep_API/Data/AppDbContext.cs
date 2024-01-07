@@ -10,6 +10,7 @@ public class AppDbContext: IdentityDbContext
 
     public DbSet<Chapter> Chapters { get; set; }
     public DbSet<Project> Projects { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Speaker> Speakers { get; set; }
     public DbSet<TextBlock> TextBlocks { get; set; }
     public DbSet<Word> Words { get; set; }

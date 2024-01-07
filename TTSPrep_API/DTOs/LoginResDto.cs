@@ -2,7 +2,7 @@
 
 // Provides client with user info + token
 // Similar to "AppUserDto"
-public class AppUserLoggedInDto
+public class LoginResDto
 {
     public string Id { get; set; }
     public string UserName { get; set; }

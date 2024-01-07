@@ -2,10 +2,8 @@
 
 namespace TTSPrep_API.DTOs;
 
-public class AppUserRegistrationDto
+public class LoginReqDto
 {
-    [Required]
-    public string UserName { get; set; }
     [Required]
     [EmailAddress]
     public string Email { get; set; }

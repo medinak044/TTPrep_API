@@ -2,7 +2,7 @@
 
 namespace TTSPrep_API.DTOs;
 
-public class TokenRequestDto
+public class TokenReqDto
 {
     [Required]
     public string Token { get; set; }
