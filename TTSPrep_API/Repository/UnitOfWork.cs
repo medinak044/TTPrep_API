@@ -24,11 +24,7 @@ public class UnitOfWork: IUnitOfWork, IDisposable
     public ITextBlockRepository TextBlocks => new TextBlockRepository(_context);
     public IWordRepository Words => new WordRepository(_context);
 
-    public void Dispose()
-    {
-        _context.Dispose();
-    }
-
+    // Used for .NET session (cookie) authentication
     public string GetCurrentUserId()
     {
         return _httpContextAccessor.HttpContext?.User.GetUserId(); // Gets user Id value from cookie
@@ -38,5 +34,9 @@ public class UnitOfWork: IUnitOfWork, IDisposable
     {
         var saved = await _context.SaveChangesAsync(); // Returns an integer
         return saved > 0 ? true : false;
+    }
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }

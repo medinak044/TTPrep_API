@@ -8,9 +8,9 @@ public class Chapter
     [Key]
     public string Id { get; set; }
     public string? Title { get; set; } // Default to "Chapter 1" (based on OrderNumber)
-    [Range(1, int.MaxValue)]
+    [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0")]
     public int OrderNumber { get; set; }
-    /* Start at 1, not 0. Ex: If you want the item to relocate to 2 in the list, 
+    /* Ex: If you want the item to relocate to 2 in the list, 
      * first add +1 to items 2 and above, then assign the item to 2*/
     [ForeignKey(nameof(Project))]
     public string ProjectId { get; set; }

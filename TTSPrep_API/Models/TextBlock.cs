@@ -8,7 +8,7 @@ public class TextBlock
     [Key]
     public string Id { get; set; }
     public string? Label { get; set; }
-    [Range(1, int.MaxValue)]
+    [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0")]
     public int OrderNumber { get; set; }
     public string? OriginalText { get; set; }
     public string? ModifiedText { get; set; }
