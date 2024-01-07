@@ -69,7 +69,7 @@ public class AccountController : ControllerBase
             return BadRequest(new AuthResult()
             {
                 Success = false,
-                Messages = new List<string>() { "Server error" }
+                Messages = new List<string>() { "Could not retrieve any users" }
             });
         }
         else
@@ -285,9 +285,13 @@ public class AccountController : ControllerBase
         //AppUserLoggedInDto loggedInUser = _mapper.Map<AppUserLoggedInDto>(existingUser);
         AppUserLoggedInDto loggedInUser = new AppUserLoggedInDto()
         {
+            Id = existingUser.Id,
             UserName = existingUser.UserName,
             Email = existingUser.Email,
+            DateCreated = existingUser.DateCreated,
+            DateCreatedStr = existingUser.DateCreated.ToString(DateFormat.Month_Day_Year)
             //Token = AuthResult jwtTokenResult // Then map the token data
+            //RefreshToken =
         };
 
         //// Then map the token data
@@ -309,7 +313,7 @@ public class AccountController : ControllerBase
             return BadRequest(new AuthResult()
             {
                 Success = false,
-                Messages = new List<string>() { "Email doesn't exist" }
+                Messages = new List<string>() { "User doesn't exist" }
             });
         }
 
@@ -324,15 +328,24 @@ public class AccountController : ControllerBase
         //}
         #endregion
 
-        // Map values
+        // Overwrite values
         existingUser.UserName = updatedUserDto.UserName;
         existingUser.Email = updatedUserDto.Email;
 
         // Save updated values to db
         await _userManager.UpdateAsync(existingUser);
 
-        //return Ok("User successfully updated");
-        return Ok(existingUser);
+        // Prepare to send updated user data back to client via DTO
+        var userDto = new AppUserDto()
+        {
+            Id = existingUser.Id,
+            UserName = existingUser.UserName,
+            Email = existingUser.Email,
+            DateCreated = existingUser.DateCreated,
+            DateCreatedStr = existingUser.DateCreated.ToString()
+        };
+
+        return Ok(userDto);
     }
 
 
