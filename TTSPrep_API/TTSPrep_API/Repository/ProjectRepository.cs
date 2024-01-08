@@ -22,6 +22,7 @@ public class ProjectRepository: Repository<Project>, IProjectRepository
         {
             project.Chapters = _context.Chapters.Where(c => c.ProjectId == project.Id).ToList();
             project.Words = _context.Words.Where(w => w.ProjectId == project.Id).ToList();
+            project.Speakers = _context.Speakers.Where(s => s.ProjectId == project.Id).ToList();
         }
 
         return projects;
@@ -33,6 +34,7 @@ public class ProjectRepository: Repository<Project>, IProjectRepository
         Project project = await _context.Projects.FindAsync(projectId);
         _context.Entry(project).Collection(p => p.Chapters).Load();
         _context.Entry(project).Collection(p => p.Words).Load();
+        _context.Entry(project).Collection(p => p.Speakers).Load();
 
         // Explicitly load Project data so that the navigation properties will load their values
         //List<Project> projects = _context.Projects.ToList();

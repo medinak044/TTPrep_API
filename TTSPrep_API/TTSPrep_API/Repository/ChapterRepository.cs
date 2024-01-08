@@ -21,6 +21,7 @@ public class ChapterRepository: Repository<Chapter>, IChapterRepository
         foreach (Chapter chapter in chapters)
         {
             chapter.TextBlocks = _context.TextBlocks.Where(t => t.ChapterId == chapter.Id).ToList();
+            chapter.TextBlockLabels = _context.TextBlockLabels.Where(t => t.ChapterId != chapter.Id).ToList();
         }
 
         return chapters;

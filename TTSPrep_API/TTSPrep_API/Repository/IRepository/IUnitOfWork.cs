@@ -6,6 +6,7 @@ public interface IUnitOfWork
     IProjectRepository Projects { get; }
     ISpeakerRepository Speakers { get; }
     ITextBlockRepository TextBlocks { get; }
+    ITextBlockLabelRepository TextBlockLabels { get; }
     IWordRepository Words { get; }
     string GetCurrentUserId();
     Task<bool> SaveAsync();

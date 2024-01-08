@@ -22,6 +22,7 @@ public class UnitOfWork: IUnitOfWork, IDisposable
     public IProjectRepository Projects => new ProjectRepository(_context);
     public ISpeakerRepository Speakers => new SpeakerRepository(_context);
     public ITextBlockRepository TextBlocks => new TextBlockRepository(_context);
+    public ITextBlockLabelRepository TextBlockLabels => new TextBlockLabelRepository(_context);
     public IWordRepository Words => new WordRepository(_context);
 
     // Used for .NET session (cookie) authentication

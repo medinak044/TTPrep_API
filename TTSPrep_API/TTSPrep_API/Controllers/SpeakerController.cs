@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TTSPrep_API.Helpers;
@@ -157,5 +159,55 @@ public class SpeakerController : ControllerBase
         }
 
         return Ok(speaker);
+    }
+
+    [HttpDelete("RemoveUnusedSpeakers")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRoles.User)]
+    public async Task<ActionResult> RemoveUnusedSpeakers()
+    {
+        var allSpeakers = await _unitOfWork.Speakers.GetAllAsync();
+        var allProjects = await _unitOfWork.Projects.GetAllAsync();
+        var speakersToDelete = new List<Speaker>();
+
+        foreach (var speaker in allSpeakers)
+        {
+            bool matchFound = false;
+
+            foreach (var project in allProjects)
+            {
+                if (project.Id.Equals(speaker.ProjectId))
+                {
+                    matchFound = true;
+                    break; 
+                }
+            }
+
+            if (matchFound == true) { continue; }
+
+            speakersToDelete.Add(speaker);  // Queue for deletion if project id does not match any existing project
+        }
+
+        // Don't make a call to the db if list is empty
+        if (speakersToDelete.Count() == 0)
+        {
+            return BadRequest(new AuthResult()
+            {
+                Success = true,
+                Messages = new List<string>() { "No speakers to delete" }
+            });
+        }
+
+        // Delete range
+        await _unitOfWork.Speakers.RemoveRangeAsync(speakersToDelete);
+        if (!await _unitOfWork.SaveAsync())
+        {
+            return BadRequest(new AuthResult()
+            {
+                Success = false,
+                Messages = new List<string>() { "Something went wrong while saving" }
+            });
+        }
+
+        return Ok(speakersToDelete);
     }
 }

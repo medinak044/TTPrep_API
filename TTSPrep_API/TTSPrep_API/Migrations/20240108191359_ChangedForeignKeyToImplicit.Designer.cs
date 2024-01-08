@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TTSPrep_API.Data;
 
@@ -11,9 +12,11 @@ using TTSPrep_API.Data;
 namespace TTSPrep_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240108191359_ChangedForeignKeyToImplicit")]
+    partial class ChangedForeignKeyToImplicit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,11 +334,9 @@ namespace TTSPrep_API.Migrations
 
                     b.Property<string>("ProjectId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("Speakers");
                 });
@@ -364,34 +365,11 @@ namespace TTSPrep_API.Migrations
                     b.Property<string>("SpeakerId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TextBlockLabelId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ChapterId");
 
                     b.ToTable("TextBlocks");
-                });
-
-            modelBuilder.Entity("TTSPrep_API.Models.TextBlockLabel", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ChapterId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChapterId");
-
-                    b.ToTable("TextBlockLabels");
                 });
 
             modelBuilder.Entity("TTSPrep_API.Models.Word", b =>
@@ -505,28 +483,10 @@ namespace TTSPrep_API.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("TTSPrep_API.Models.Speaker", b =>
-                {
-                    b.HasOne("TTSPrep_API.Models.Project", null)
-                        .WithMany("Speakers")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TTSPrep_API.Models.TextBlock", b =>
                 {
                     b.HasOne("TTSPrep_API.Models.Chapter", null)
                         .WithMany("TextBlocks")
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TTSPrep_API.Models.TextBlockLabel", b =>
-                {
-                    b.HasOne("TTSPrep_API.Models.Chapter", null)
-                        .WithMany("TextBlockLabels")
                         .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -543,16 +503,12 @@ namespace TTSPrep_API.Migrations
 
             modelBuilder.Entity("TTSPrep_API.Models.Chapter", b =>
                 {
-                    b.Navigation("TextBlockLabels");
-
                     b.Navigation("TextBlocks");
                 });
 
             modelBuilder.Entity("TTSPrep_API.Models.Project", b =>
                 {
                     b.Navigation("Chapters");
-
-                    b.Navigation("Speakers");
 
                     b.Navigation("Words");
                 });

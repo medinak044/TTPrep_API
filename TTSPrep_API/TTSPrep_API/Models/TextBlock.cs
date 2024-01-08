@@ -14,7 +14,12 @@ public class TextBlock
     public string? ModifiedText { get; set; }
     [ForeignKey(nameof(Chapter))]
     public string ChapterId { get; set; }
-    [ForeignKey(nameof(Speaker))]
-    public string? SpeakerId { get; set; }
-    public Speaker? Speaker { get; set;}
+    //[ForeignKey(nameof(Speaker))]
+    public string? SpeakerId { get; set; } // Implied foreign key
+    [NotMapped]
+    public Speaker? Speaker { get; set; }
+    //[ForeignKey(nameof(TextBlockLabel))]
+    public string? TextBlockLabelId { get; set; } // Implied foreign key
+    [NotMapped]
+    public TextBlockLabel? TextBlockLabel { get; set; }
 }

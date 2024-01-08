@@ -16,6 +16,7 @@ public class Project
     public AppUser? Owner { get; set; } // Don't add this data
     public ICollection<Chapter>? Chapters { get; set; }
     public ICollection<Word>? Words { get; set; }
+    public ICollection<Speaker>? Speakers { get; set; } 
     //[ForeignKey("Chapter")]
     //public string? CurrentChapterId { get; set; }
     //public Chapter? Chapter { get; set; }

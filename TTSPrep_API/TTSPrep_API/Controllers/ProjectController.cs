@@ -52,6 +52,14 @@ public class ProjectController : ControllerBase
         return Ok(projects);
     }
 
+    [HttpGet("GetProjectById/{projectId}")]
+    public async Task<ActionResult> GetProjectById(string projectId)
+    {
+        var project = await _unitOfWork.Projects.GetByIdAsync(projectId);
+        return Ok(project);
+    }
+
+
     [HttpPost("CreateProject")]
     public async Task<ActionResult> CreateProject(ProjectReqDto projectReqDto)
     {

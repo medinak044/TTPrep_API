@@ -34,6 +34,12 @@ public class TextBlockController : ControllerBase
     public async Task<ActionResult> GetTextBlocksByChapterId(string chapterId)
     {
         var textBlocks = _unitOfWork.TextBlocks.GetSome(t => t.ChapterId == chapterId).ToList();
+        foreach (var textBlock in textBlocks)
+        {
+            textBlock.Speaker = await _unitOfWork.Speakers.GetByIdAsync(textBlock.SpeakerId);
+            textBlock.TextBlockLabel = await _unitOfWork.TextBlockLabels.GetByIdAsync(textBlock.TextBlockLabelId);
+        }
+
         return Ok(textBlocks);
     }
 
@@ -41,6 +47,8 @@ public class TextBlockController : ControllerBase
     public async Task<ActionResult> GetTextBlockById(string textBlockId)
     {
         var textBlock = await _unitOfWork.TextBlocks.GetByIdAsync(textBlockId);
+        textBlock.Speaker = await _unitOfWork.Speakers.GetByIdAsync(textBlock.SpeakerId);
+        textBlock.TextBlockLabel = await _unitOfWork.TextBlockLabels.GetByIdAsync(textBlock.TextBlockLabelId);
         return Ok(textBlock);
     }
 
@@ -113,15 +121,6 @@ public class TextBlockController : ControllerBase
             });
         }
 
-        if (await _unitOfWork.Speakers.GetByIdAsync(textBlockForm.SpeakerId) == null)
-        {
-            return BadRequest(new AuthResult()
-            {
-                Success = false,
-                Messages = new List<string>() { "A valid speaker ID must be assigned" }
-            });
-        }
-
         #region Overwrite values
         textBlock.Label = textBlockForm.Label;
 
@@ -160,12 +159,14 @@ public class TextBlockController : ControllerBase
         return Ok(textBlock);
     }
 
-    //[HttpPut("UpdateTextBlockOrderNumber")]
-    //public async Task<ActionResult> UpdateTextBlockOrderNumber([FromBody] Chapter chapterForm)
-    //{
-    //Increment all the order numbers of items by 1 to make space for the submitted items
-    //Ex: Insert item between 1 and 2. Increment items 2 and up by 1.
-    //}
+    [HttpPut("UpdateTextBlockOrderNumber/{orderNumber}")]
+    public async Task<ActionResult> UpdateTextBlockOrderNumber([FromRoute] string orderNumber, [FromBody] TextBlock textBlockForm)
+    {
+        //Increment all the order numbers of items by 1 to make space for the submitted items
+
+        //Ex: Insert item between 1 and 2.Increment items 2 and up by 1.
+        return Ok();
+    }
 
     [HttpDelete("RemoveTextBlock/{textBlockId}")]
     public async Task<ActionResult> RemoveTextBlock(string textBlockId)

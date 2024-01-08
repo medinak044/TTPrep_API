@@ -15,4 +15,5 @@ public class Chapter
     [ForeignKey(nameof(Project))]
     public string ProjectId { get; set; }
     public ICollection<TextBlock>? TextBlocks { get; set; }
+    public ICollection<TextBlockLabel>? TextBlockLabels { get; set; }
 }
