@@ -13,7 +13,7 @@ public class Project
     public DateTime LastModifiedDate { get; set; }
     [ForeignKey(nameof(AppUser))]
     public string? OwnerId { get; set; }
-    public AppUser? Owner { get; set; }
+    public AppUser? Owner { get; set; } // Don't add this data
     public ICollection<Chapter>? Chapters { get; set; }
     public ICollection<Word>? Words { get; set; }
     //[ForeignKey("Chapter")]

@@ -76,6 +76,5 @@ public class DbInitializer: IDbInitializer
         }
 
         #endregion
-
     }
 }

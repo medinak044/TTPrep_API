@@ -12,8 +12,8 @@ using TTSPrep_API.Data;
 namespace TTSPrep_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240107202304_AddedTokens")]
-    partial class AddedTokens
+    [Migration("20240108030948_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -362,9 +362,14 @@ namespace TTSPrep_API.Migrations
                     b.Property<string>("OriginalText")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SpeakerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChapterId");
+
+                    b.HasIndex("SpeakerId");
 
                     b.ToTable("TextBlocks");
                 });
@@ -487,6 +492,12 @@ namespace TTSPrep_API.Migrations
                         .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TTSPrep_API.Models.Speaker", "Speaker")
+                        .WithMany()
+                        .HasForeignKey("SpeakerId");
+
+                    b.Navigation("Speaker");
                 });
 
             modelBuilder.Entity("TTSPrep_API.Models.Word", b =>

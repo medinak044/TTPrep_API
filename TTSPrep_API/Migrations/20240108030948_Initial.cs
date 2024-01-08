@@ -193,6 +193,31 @@ namespace TTSPrep_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JwtId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Chapters",
                 columns: table => new
                 {
@@ -241,7 +266,8 @@ namespace TTSPrep_API.Migrations
                     OrderNumber = table.Column<int>(type: "int", nullable: false),
                     OriginalText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModifiedText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ChapterId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ChapterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SpeakerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -252,6 +278,11 @@ namespace TTSPrep_API.Migrations
                         principalTable: "Chapters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TextBlocks_Speakers_SpeakerId",
+                        column: x => x.SpeakerId,
+                        principalTable: "Speakers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -304,9 +335,19 @@ namespace TTSPrep_API.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_AppUserId",
+                table: "RefreshTokens",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TextBlocks_ChapterId",
                 table: "TextBlocks",
                 column: "ChapterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TextBlocks_SpeakerId",
+                table: "TextBlocks",
+                column: "SpeakerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Words_ProjectId",
@@ -333,7 +374,7 @@ namespace TTSPrep_API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Speakers");
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "TextBlocks");
@@ -346,6 +387,9 @@ namespace TTSPrep_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Chapters");
+
+            migrationBuilder.DropTable(
+                name: "Speakers");
 
             migrationBuilder.DropTable(
                 name: "Projects");

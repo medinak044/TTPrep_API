@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using TTSPrep_API.Data;
 using TTSPrep_API.Models;
 using TTSPrep_API.Repository.IRepository;
@@ -14,7 +13,6 @@ public class ProjectRepository: Repository<Project>, IProjectRepository
         _context = context;
     }
 
-    // Used by Dashboard controller (displays all the projects associated with the current user)
     public override IEnumerable<Project> GetSome(Expression<Func<Project, bool>> predicate)
     {
         IQueryable<Project> projects = _context.Projects.Where(predicate);

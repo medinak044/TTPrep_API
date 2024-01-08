@@ -359,9 +359,14 @@ namespace TTSPrep_API.Migrations
                     b.Property<string>("OriginalText")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SpeakerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChapterId");
+
+                    b.HasIndex("SpeakerId");
 
                     b.ToTable("TextBlocks");
                 });
@@ -484,6 +489,12 @@ namespace TTSPrep_API.Migrations
                         .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TTSPrep_API.Models.Speaker", "Speaker")
+                        .WithMany()
+                        .HasForeignKey("SpeakerId");
+
+                    b.Navigation("Speaker");
                 });
 
             modelBuilder.Entity("TTSPrep_API.Models.Word", b =>

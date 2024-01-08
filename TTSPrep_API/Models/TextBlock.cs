@@ -14,4 +14,7 @@ public class TextBlock
     public string? ModifiedText { get; set; }
     [ForeignKey(nameof(Chapter))]
     public string ChapterId { get; set; }
+    [ForeignKey(nameof(Speaker))]
+    public string? SpeakerId { get; set; }
+    public Speaker? Speaker { get; set;}
 }
