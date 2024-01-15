@@ -1,1 +1,54 @@
-<p>login works!</p>
+<div class="container container-login col-lg-4 col-md-6 col-sm-6">
+    <div class="justify-content-center">
+        <div class="card card-lg text-center">
+            <div class="card-body" style="padding: 2.25rem;">
+                <div class="login-form">
+                    <h2 class="text-center" style="margin-bottom: 2.25rem;">Login</h2>
+                    <form [formGroup]="loginForm" (submit)="loginSubmit()" autocomplete="off">
+                        <div class="form-group">
+                            <div class="input-group mb-4">
+                                <span class="input-group-text">
+                                    <span class="fa fa-user" aria-hidden="true"></span>
+                                </span>
+                                <input class="form-control" formControlName="email" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group mb-4">
+                                <span class="input-group-text">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                </span>
+                                <input class="form-control" type="password" formControlName="password"
+                                    placeholder="Password">
+                            </div>
+                        </div>
+                        <div>
+                            <div *ngIf="f['email'].getError('pattern')!=null" class="errorMessage">Invalid
+                                Email</div>
+                        </div>
+                        <div class="form-group">
+                            <button [disabled]="loginForm.invalid" class="btn btn-success btn-block"
+                                *ngIf="!loginButtonIsPressed">Login</button>
+                            <div class="d-flex justify-content-center" *ngIf="loginButtonIsPressed">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <br />
+                            <span style="font-size: 75%; opacity: 0.5;"
+                                *ngIf="loginErrorMessage">{{loginErrorMessage}}</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <div>No account? <a routerLink="/sign-up">Create one!</a></div>
+    <div class="container hover-fade">
+        <div><a routerLink="/login" (click)="demoFillForm_Admin()">Demo user (Admin)</a>
+        </div>
+        <div><a routerLink="/login" (click)="demoFillForm_AppUser()">Demo user (AppUser)</a></div>
+    </div>
+</div>

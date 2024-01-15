@@ -4,11 +4,11 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AppUser } from '../models/appUser';
+import { AppUserDto } from '../models/appUserDto';
 import { AppUserUpdateDto } from '../models/appUserUpdateDto';
-import { AppUserRegister } from '../models/appUserRegister';
-import { AppUserLogin } from '../models/appUserLogin';
-import { AppUserLoggedIn } from '../models/appUserLoggedIn';
+import { RegistrationReqDto } from '../models/registrationReqDto';
+import { LoginReqDto } from '../models/loginReqDto';
+import { LoginResDto } from '../models/loginResDto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,17 +25,17 @@ export class AppUserService {
 
   // A test route to see if token interceptor works
   getUserProfile() {
-    return this.http.get<AppUser>
+    return this.http.get<AppUserDto>
       (`${environment.apiUrl}/${this.controllerUrl}/GetUserProfile`)
   }
 
-  getUserById(userId: string): Observable<AppUser> {
-    return this.http.get<AppUser>
+  getUserById(userId: string): Observable<AppUserDto> {
+    return this.http.get<AppUserDto>
       (`${environment.apiUrl}/${this.controllerUrl}/GetUserById/${userId}`)
   }
 
-  getAllUsers(): Observable<AppUser[]> {
-    return this.http.get<AppUser[]>
+  getAllUsers(): Observable<AppUserDto[]> {
+    return this.http.get<AppUserDto[]>
       (`${environment.apiUrl}/${this.controllerUrl}/GetAllUsers`)
   }
 
@@ -49,7 +49,7 @@ export class AppUserService {
       (`${environment.apiUrl}/${this.controllerUrl}/DeleteUser/${userId}`)
   }
 
-  register(registerForm: AppUserRegister) {
+  register(registerForm: RegistrationReqDto) {
     return this.http.post
       (`${environment.apiUrl}/${this.controllerUrl}/Register`, registerForm).pipe(
         map((user: any) => {
@@ -61,7 +61,7 @@ export class AppUserService {
       )
   }
 
-  login(loginForm: AppUserLogin) {
+  login(loginForm: LoginReqDto) {
     return this.http.post
       (`${environment.apiUrl}/${this.controllerUrl}/Login`, loginForm).pipe(
         map((user: any) => {
@@ -73,7 +73,7 @@ export class AppUserService {
       )
   }
 
-  setCurrentUser(user: AppUserLoggedIn) {
+  setCurrentUser(user: LoginResDto) {
     user.roles = []
     const roles = this.getDecodedToken(user.token).role // Extract roles from token
     Array.isArray(roles) ? user.roles = roles : user.roles.push(roles) // Set found roles in user object

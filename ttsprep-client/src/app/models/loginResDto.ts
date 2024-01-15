@@ -1,5 +1,5 @@
 // Modeled after "LoginResDto" from api
-export class AppUserLoggedIn {
+export class LoginResDto {
   id = ""
   userName = ""
   email = ""

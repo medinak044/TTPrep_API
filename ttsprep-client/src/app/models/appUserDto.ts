@@ -1,5 +1,5 @@
 // Modeled after "AppUserDto" from api
-export class AppUser {
+export class AppUserDto {
   id = ""
   userName = ""
   email = ""
