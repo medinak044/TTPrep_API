@@ -1,6 +1,6 @@
 // Modeled after "RegistrationReqDto" from api
 export class RegistrationReqDto {
-    firstName = ""
+    userName = ""
     email = ""
     password = ""
 }

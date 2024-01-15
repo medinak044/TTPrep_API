@@ -11,6 +11,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProjectsComponent
   ],
   imports: [
     BrowserModule,

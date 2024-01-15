@@ -1,0 +1,14 @@
+.container-register {
+    margin-top: 7rem;
+    margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+    color: tomato;
+}
+
+/* Stretch register button */
+.btn-block {
+    display: block;
+    width: 100%;
+}

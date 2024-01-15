@@ -1,0 +1,49 @@
+.container-login {
+    margin-top: 10rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Space out input fields */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Stretch login button */
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.errorMessage {
+    color: tomato;
+}
+
+
+.hover-fade:hover {
+    animation: fade-in 0.9s;
+}
+
+.hover-fade:not(:hover) {
+    animation: fade-out 0s;
+    opacity: 0.3;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0.3;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.1;
+    }
+}
