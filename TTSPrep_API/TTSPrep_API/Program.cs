@@ -20,6 +20,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); // Many to many relationships will go into the entity and get stuck in a loop
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // AutoMapper 
 builder.Services.AddEndpointsApiExplorer(); // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(options =>
 {
@@ -90,6 +91,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>();
 
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy(
+            name: myAllowSpecificOrigins,
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:4200") // Include client app's origin
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+    }
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,6 +118,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 SeedDatabase();
+
+app.UseCors(myAllowSpecificOrigins);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
