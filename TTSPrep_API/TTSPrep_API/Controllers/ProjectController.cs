@@ -83,7 +83,7 @@ public class ProjectController : ControllerBase
         var project = new Project
         {
             Id = newId,
-            Title = projectReqDto.Title,
+            Title = projectReqDto.Title.IsNullOrEmpty() ? $"project-{newId}" : projectReqDto.Title, // Make sure project title has a value
             Description = projectReqDto.Description,
             CreatedDate = timestamp,
             LastModifiedDate = timestamp,

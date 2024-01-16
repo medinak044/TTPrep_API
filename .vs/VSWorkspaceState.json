@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ttsprep-client",
+    "\\ttsprep-client\\src",
+    "\\ttsprep-client\\src\\app",
+    "\\ttsprep-client\\src\\app\\pages",
+    "\\ttsprep-client\\src\\app\\pages\\projects"
+  ],
+  "SelectedNode": "\\ttsprep-client\\src\\app\\pages\\projects\\projects.component.html",
+  "PreviewInSolutionExplorer": false
+}

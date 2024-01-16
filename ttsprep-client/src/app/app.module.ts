@@ -12,6 +12,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
+import { ProjectCreateModalComponent } from './components/project-create-modal/project-create-modal.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ProjectsComponent } from './pages/projects/projects.component';
     LoginComponent,
     RegisterComponent,
     PageNotFoundComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    ProjectCreateModalComponent
   ],
   imports: [
     BrowserModule,
