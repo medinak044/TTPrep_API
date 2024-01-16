@@ -13,6 +13,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectFormModalComponent } from './components/project-form-modal/project-form-modal.component';
+import { ProjectComponent } from './pages/project/project.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ProjectFormModalComponent } from './components/project-form-modal/proje
     RegisterComponent,
     PageNotFoundComponent,
     ProjectsComponent,
-    ProjectFormModalComponent
+    ProjectFormModalComponent,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,

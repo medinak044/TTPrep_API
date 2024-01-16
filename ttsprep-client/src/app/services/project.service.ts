@@ -25,9 +25,9 @@ export class ProjectService {
     (`${environment.apiUrl}/${this.projectControllerUrl}/GetUserProjects`)
   }
 
-  getProjectById(projectId: string): Observable<Project[]> {
-    return this.http.get<Project[]>
-    (`${environment.apiUrl}/${this.projectControllerUrl}/GetProjectById/{projectId}`)
+  getProjectById(projectId: string): Observable<Project> {
+    return this.http.get<Project>
+    (`${environment.apiUrl}/${this.projectControllerUrl}/GetProjectById/${projectId}`)
   }
 
   createProject(projectReqDto: ProjectReqDto): Observable<Project> {

@@ -11,7 +11,7 @@ import {Project} from "../../models/project";
 })
 export class ProjectFormModalComponent implements OnInit {
   @Input() loggedInUser!: LoginResDto
-  @Input() inputProject!: Project // For reading, updating, deleting
+  @Input() inputProject!: Project
   @Output() sentProjectForm = new EventEmitter<ProjectReqDto>() // Emit the project form details to the parent component
 
 

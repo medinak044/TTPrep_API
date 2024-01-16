@@ -1,6 +1,8 @@
-<app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="createProject($event)"></app-project-form-modal>
+
 
 <div *ngIf="!currentProject">
+  <app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="createProject($event)"></app-project-form-modal>
+
   <div class="text-center">
     <h1>Projects ({{projects?.length}})</h1>
     <br>
@@ -71,3 +73,6 @@
   </div>
 </div>
 
+<div *ngIf="currentProject">
+  <app-project [loggedInUser]="loggedInUser" [inputProject]="currentProject" ></app-project>
+</div>
