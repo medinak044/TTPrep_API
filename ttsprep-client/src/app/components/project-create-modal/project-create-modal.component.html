@@ -1,0 +1,32 @@
+<!-- Modal -->
+<div class="modal fade" id="projectCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" *ngIf="!inputProject">Create a project</h1>
+        <h1 class="modal-title fs-5" *ngIf="inputProject">Update project</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="projectForm" (submit)="submitProjectForm()" autocomplete="off">
+        <div class="modal-body">
+          <input type="hidden" formControlName="id" />
+          <div class="form-row form-group">
+            <div class="col">
+              <input formControlName="title" class="form-control form-control mb-3" placeholder="Title" />
+            </div>
+            <div class="form-row form-group">
+              <div class="col">
+                <input formControlName="description" class="form-control form-control mb-3" placeholder="Description" />
+              </div>
+            </div>
+          </div>
+          <input type="hidden" formControlName="ownerId" />
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button [disabled]="projectForm.invalid" class="btn btn-primary">Create</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
