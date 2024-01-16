@@ -13,7 +13,6 @@ export class ProjectService {
 
   constructor(private http: HttpClient) { }
 
-  // ---- Project ---- //
   getAllProjects(): Observable<Project[]> {
     return this.http.get<Project[]>
     (`${environment.apiUrl}/${this.projectControllerUrl}/GetAllProjects`)
