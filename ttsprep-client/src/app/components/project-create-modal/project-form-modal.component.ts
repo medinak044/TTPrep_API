@@ -5,11 +5,11 @@ import {ProjectReqDto} from "../../models/projectReqDto";
 import {Project} from "../../models/project";
 
 @Component({
-  selector: 'app-project-create-modal',
-  templateUrl: './project-create-modal.component.html',
-  styleUrls: ['./project-create-modal.component.css']
+  selector: 'app-project-form-modal',
+  templateUrl: './project-form-modal.component.html',
+  styleUrls: ['./project-form-modal.component.css']
 })
-export class ProjectCreateModalComponent implements OnInit {
+export class ProjectFormModalComponent implements OnInit {
   @Input() loggedInUser!: LoginResDto
   @Input() inputProject!: Project // For reading, updating, deleting
   @Output() sentProjectForm = new EventEmitter<ProjectReqDto>() // Emit the project form details to the parent component

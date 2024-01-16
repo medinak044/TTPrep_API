@@ -12,7 +12,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ProjectsComponent } from './pages/projects/projects.component';
-import { ProjectCreateModalComponent } from './components/project-create-modal/project-create-modal.component';
+import { ProjectFormModalComponent } from './components/project-create-modal/project-form-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import { ProjectCreateModalComponent } from './components/project-create-modal/p
     RegisterComponent,
     PageNotFoundComponent,
     ProjectsComponent,
-    ProjectCreateModalComponent
+    ProjectFormModalComponent
   ],
   imports: [
     BrowserModule,

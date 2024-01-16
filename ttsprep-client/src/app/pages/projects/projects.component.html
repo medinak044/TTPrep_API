@@ -5,7 +5,7 @@
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectCreateModal">
     <i class="bi bi-plus-lg me-2"></i><b>Create new project</b>
   </button>
-  <app-project-create-modal [loggedInUser]="loggedInUser" (sentProjectForm)="createProject($event)"></app-project-create-modal>
+  <app-project-form-modal [loggedInUser]="loggedInUser" (sentProjectForm)="createProject($event)"></app-project-form-modal>
 </div>
 
 <div class="container">
