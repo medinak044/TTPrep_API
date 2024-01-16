@@ -127,14 +127,14 @@ public class ProjectController : ControllerBase
         return Ok(project);
     }
 
-   [HttpPut("UpdateProject/{projectId}")]
-    public async Task<ActionResult> UpdateProject([FromRoute] string projectId, [FromBody] ProjectReqDto projectReqDto)
+   [HttpPut("UpdateProject")]
+    public async Task<ActionResult> UpdateProject([FromBody] ProjectReqDto projectReqDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         // Check if exists in db
-        var project = await _unitOfWork.Projects.GetByIdAsync(projectId);
+        var project = await _unitOfWork.Projects.GetByIdAsync(projectReqDto.Id);
         if (project == null)
         {
             return NotFound(new AuthResult()
@@ -145,7 +145,7 @@ public class ProjectController : ControllerBase
         }
 
         // Overwrite values
-        project.Title = projectReqDto.Title;
+        project.Title = projectReqDto.Title.IsNullOrEmpty() ? $"project-{project.Id}" : projectReqDto.Title; // Make sure project title has a value
         project.Description = projectReqDto.Description;
 
         await _unitOfWork.Projects.UpdateAsync(project);

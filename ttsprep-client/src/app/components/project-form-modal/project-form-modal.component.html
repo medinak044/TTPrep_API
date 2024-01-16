@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" *ngIf="!inputProject">Create a project</h1>
-        <h1 class="modal-title fs-5" *ngIf="inputProject">Update project</h1>
+        <h1 class="modal-title fs-5" *ngIf="inputProject">Edit project</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="projectForm" (submit)="submitProjectForm()" autocomplete="off">
@@ -24,7 +24,8 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+        <button *ngIf="!inputProject" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+        <button *ngIf="inputProject" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
       </div>
       </form>
     </div>

@@ -15,7 +15,7 @@ export class ProjectsComponent implements OnInit {
   loggedInUser!: LoginResDto
   projects?: Project[] = []
   projects$?: Observable<Project[]>
-  currentProject?: any // When this is populated with Project data, open the component
+  currentProject?: any // When this is populated with Project data, open the project view component
 
   projectsFiltered?: Project[] = []
   _filterText: string = ""
@@ -64,13 +64,24 @@ export class ProjectsComponent implements OnInit {
     )
   }
 
-  setCurrentProject(projectDetails: Project) {
-    this.currentProject = projectDetails // Set the current event based on emitted event id from child component
+  setCurrentProject(project: Project) {
+    this.currentProject = project // Set the current event based on emitted event id from child component
   }
 
   // Can be used to switch projects, or go back to project dashboard
-  updateCurrentProject(projectDetails: Project) {
-    this.currentProject = projectDetails
+  updateCurrentProject(project: Project) {
+    this.currentProject = project
+  }
+
+  editProject(projectReqDto: ProjectReqDto) {
+    if (projectReqDto) {
+      this.projectService.updateProject(projectReqDto).subscribe({
+        next: (res: any) => {
+          this.getUserProjects() // Update visual display
+        },
+        error: (err) => { console.log(err) }
+      })
+    }
   }
 
   removeProject(projectId: string) {

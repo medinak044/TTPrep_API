@@ -1,48 +1,73 @@
-<div class="text-center">
-  <h1>Projects ({{projects?.length}})</h1>
-  <br>
-  <!--(Modal activate button)-->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectCreateModal">
-    <i class="bi bi-plus-lg me-2"></i><b>Create new project</b>
-  </button>
-  <app-project-form-modal [loggedInUser]="loggedInUser" (sentProjectForm)="createProject($event)"></app-project-form-modal>
+<app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="createProject($event)"></app-project-form-modal>
+
+<div *ngIf="!currentProject">
+  <div class="text-center">
+    <h1>Projects ({{projects?.length}})</h1>
+    <br>
+    <!--(Modal activate button)-->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectCreateModal">
+      <i class="bi bi-plus-lg me-2"></i><b>Create new project</b>
+    </button>
+
+  </div>
+
+  <div class="container">
+    <input type="text"
+           placeholder="Search by event title"
+           [(ngModel)]="filterText"
+    >
+  </div>
+
+  <hr class="container">
+
+  <div class="text-center">
+    <table class="table table-striped container">
+      <thead>
+      <th>Title</th>
+      <th>Created</th>
+      <th></th> <!-- Project option buttons -->
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let project of projectsFiltered">
+          <td>{{ project.title }}</td>
+          <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
+          <td>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button class="btn btn-s btn-danger me-2" data-bs-toggle="modal" data-bs-target="#projectDeleteModal">
+                <i class="bi bi-x-lg me-2"></i>Remove
+              </button>
+              <!--  Delete confirmation modal -->
+              <div class="modal fade" id="projectDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5">Remove Project</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to remove the project "{{project.title}}"?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button class="btn btn-primary" data-bs-dismiss="modal" (click)="removeProject(project.id)">Remove Project</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project edit button should only be available when a project is in focus-->
+  <!--            <button class="btn btn-s btn-warning me-2" data-bs-toggle="modal" data-bs-target="#projectCreateModal">-->
+  <!--              <i class="bi bi-pencil-square me-2"></i>Edit-->
+  <!--            </button>-->
+              <button class="btn btn-s btn-primary me-2" (click)="setCurrentProject(project)">
+                <i class="bi bi-arrow-right me-2"></i>Open
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<div class="container">
-  <input type="text"
-         placeholder="Search by event title"
-         [(ngModel)]="filterText"
-  >
-</div>
-
-<hr class="container">
-
-<div class="text-center">
-  <table class="table table-striped container">
-    <thead>
-    <th>Title</th>
-    <th>Created</th>
-    <th></th> <!-- Project option buttons -->
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let project of projectsFiltered">
-        <td>{{ project.title }}</td>
-        <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
-        <td>
-          <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-            <button class="btn btn-s btn-danger me-2" (click)="removeProject(project.id)">
-              <i class="bi bi-x-lg me-2"></i>Remove
-            </button>
-            <button class="btn btn-s btn-warning me-2" >
-              <i class="bi bi-pencil-square me-2"></i>Edit
-            </button>
-            <button class="btn btn-s btn-primary me-2" >
-              <i class="bi bi-arrow-right me-2"></i>Open
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>

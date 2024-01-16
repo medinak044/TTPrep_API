@@ -35,9 +35,9 @@ export class ProjectService {
     (`${environment.apiUrl}/${this.projectControllerUrl}/CreateProject`, projectReqDto)
   }
 
-  updateProject(projectId: string, projectReqDto: ProjectReqDto): Observable<Project> {
+  updateProject(projectReqDto: ProjectReqDto): Observable<Project> {
     return this.http.put<Project>
-    (`${environment.apiUrl}/${this.projectControllerUrl}/UpdateProject/${projectId}`, projectReqDto)
+    (`${environment.apiUrl}/${this.projectControllerUrl}/UpdateProject`, projectReqDto)
   }
 
   removeProject(projectId: string): Observable<Project> {
