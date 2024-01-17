@@ -52,7 +52,7 @@ export class ProjectComponent implements OnInit {
   }
 
   setupChapterModal(crudMethodMode: CrudMethodsEnum, chapter?: Chapter) {
-    this.setCurrentChapter(chapter)
+    // this.setCurrentChapter(chapter)
 
     // Set up the child component
     this.chapterFormModalComponent.inputChapter = chapter
@@ -72,22 +72,41 @@ export class ProjectComponent implements OnInit {
       return
     }
 
+    // When creating a chapter, update the current chapter if none is being displayed
+    if (!this.currentChapter && this.chapterFormModalComponent.crudMethodMode == this.crudMethodModeEnum.CREATE) {
+      this.currentChapter = chapter
+    }
+
+      // Only update the current chapter data if user edited the same chapter
+    if (this.currentChapter?.id == chapter.id)
+      { this.setCurrentChapter(chapter) }
+
     this.currentProject.chapters?.push(chapter) // Attach chapter
+
     this.sortChapters()
   }
 
-  sortChapters() {
-    // Sort by order number
+  async sortChapters() {
+     // Sort by order number
     this.currentProject.chapters?.sort((a, b) => {
       return a.orderNumber - b.orderNumber
     })
   }
 
-  getProjectById() {
+  async getProjectById() {
     this.projectService.getProjectById(this.projectIdParam).subscribe({
       next: (res: Project) => {
         this.currentProject = res // Update visual display
+        // Make sure the chapters are sorted
         this.sortChapters()
+          // Assign the first chapter in the sorted list as the current chapter by default
+          .then(() => {
+            if (this.currentProject.chapters) {
+              // this.currentChapter = this.currentProject.chapters ? this.currentProject.chapters[0] : undefined
+              this.currentChapter = this.currentProject.chapters[0]
+            }
+          })
+
       },
       error: (err) => { console.log(err) }
     })

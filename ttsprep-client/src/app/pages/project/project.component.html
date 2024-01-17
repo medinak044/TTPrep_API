@@ -1,38 +1,70 @@
-<div class="container">
-  <a class="btn btn-s mt-4 clickable-fade"  routerLink="/projects">
-    <i class="bi bi-arrow-return-left me-2 "></i>Back to project view
-  </a>
-</div>
+<!--<div class="container">-->
+<!--  <a class="btn btn-s mt-3 mb-3 clickable-fade"  routerLink="/projects">-->
+<!--    <i class="bi bi-arrow-left me-2 "></i>Back to project view-->
+<!--  </a>-->
+<!--</div>-->
 
-
-
-<div *ngIf="currentProject" class="main-container">
-
+<div *ngIf="currentProject" class="mt-4">
   <app-chapter-form-modal
     [projectId]="currentProject.id"
     (signalParentComponent)="attachChapterToProject($event)"></app-chapter-form-modal>
 
   <section class="space-sm">
-    <div class="container">
-      <div class="row mb-5"></div>
-
-      <div class="row flex-md-row card card-md">
+    <div class="container" style="min-width: 97%">
+      <div class="row flex-md-row card-md">
         <div class="card-body">
-          <div class="text-center mb-5">
-            <h1 class="h2 mb-2">{{currentProject.title}}<i class="bi bi-pencil-fill ms-2 clickable-fade"></i></h1>
+          <div class=" mb-5">
+            <h1 class="h2 mb-2">
+              <i class="bi bi-arrow-left me-2 clickable-fade"  routerLink="/projects"></i>
+              {{currentProject.title}}
+              <i class="bi bi-pencil-fill ms-2 clickable-fade"></i></h1>
             <!--(Modal activate button)-->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chapterFormModal"
-                    (click)="setupChapterModal(crudMethodModeEnum.CREATE, undefined)">
-              <i class="bi bi-plus-lg me-2"></i><b>Create new chapter</b>
-            </button>
+<!--            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chapterFormModal"-->
+<!--                    (click)="setupChapterModal(crudMethodModeEnum.CREATE, undefined)">-->
+<!--              <i class="bi bi-plus-lg me-2"></i><b>Create new chapter</b>-->
+<!--            </button>-->
           </div>
 
-          <div class="" style="display: flex; flex-direction: row">
-            <div class="col-9">
+          <div style="display: flex; flex-direction: row; column-gap: 0.6em">
+
+            <!-- Text column -->
+            <div class="col-9 card" style="min-height: 35rem">
+              <div *ngIf="currentChapter" style="display: flex; flex-direction: row">
+                <h5 class="card-body text-center">{{currentChapter?.title}}</h5>
+                <i class="bi bi-x-lg me-2 mt-1 clickable-fade" (click)="setCurrentChapter(undefined)"></i>
+              </div>
 <!--              TODO: Make it so that individual text blocks (cards) contain textareas-->
-              <textarea asp-for="ModifiedText" class="form-control" style="min-height: 30rem" placeholder="ModifiedText" aria-label="With textarea"></textarea>
+              <div *ngIf="currentChapter" class="container" style="display: flex; flex-direction: column">
+                <div *ngFor="let chapter of currentProject.chapters" class="" style="display: flex; flex-direction: column">
+
+                  <!--            TextBox card-->
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <a style="text-decoration: none; color: black;" >
+                          {{chapter.title}}<i class="bi bi-pencil-fill ms-2 clickable-fade"></i>
+                        </a>
+                      </h5>
+                      <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.DELETE, chapter)">
+                          <i class="bi bi-x-lg me-2"></i>Remove
+                        </a>
+                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.UPDATE, chapter)">
+                          <i class="bi bi-pencil-square me-2"></i>Edit
+                        </a>
+                        <a class="btn btn-s me-2 clickable-fade" (click)="setCurrentChapter(chapter)">
+                          <i class="bi bi-arrow-right me-2"></i>Open
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+<!--              <textarea asp-for="ModifiedText" class="form-control" style="min-height: 30rem" placeholder="ModifiedText" aria-label="With textarea"></textarea>-->
             </div>
 
+            <!-- Chapter column -->
             <div class="container card">
               <div class="flex p-4 justify-between pb-4" style="display: flex; flex-direction: row; justify-content: space-between;">
                 <h5 class="card-title">Chapters ({{currentProject.chapters?.length}})</h5>
