@@ -67,6 +67,7 @@ export class ProjectComponent implements OnInit {
 
     // If chapter was deleted in db, refresh project data in case chapter order numbers were changed
     if (this.chapterFormModalComponent.crudMethodMode == this.crudMethodModeEnum.DELETE) {
+      this.setCurrentChapter(undefined) // Clear current chapter
       this.getProjectById()
       return
     }
