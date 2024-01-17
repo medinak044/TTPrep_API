@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ProjectsComponent } from './pages/projects/projects.component';
 import { ProjectFormModalComponent } from './components/project-form-modal/project-form-modal.component';
 import { ProjectComponent } from './pages/project/project.component';
+import { ChapterFormModalComponent } from './components/chapter-form-modal/chapter-form-modal.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ProjectComponent } from './pages/project/project.component';
     PageNotFoundComponent,
     ProjectsComponent,
     ProjectFormModalComponent,
-    ProjectComponent
+    ProjectComponent,
+    ChapterFormModalComponent
   ],
   imports: [
     BrowserModule,

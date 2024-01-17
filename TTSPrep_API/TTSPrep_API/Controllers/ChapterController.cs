@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TTSPrep_API.DTOs;
 using TTSPrep_API.Helpers;
 using TTSPrep_API.Models;
@@ -79,7 +80,7 @@ public class ChapterController : ControllerBase
         var chapter = new Chapter
         {
             Id = Guid.NewGuid().ToString(),
-            Title = chapterForm.Title,
+            Title = chapterForm.Title.IsNullOrEmpty() ? $"Chapter {orderNumber}" : chapterForm.Title,
             OrderNumber = orderNumber,
             ProjectId = chapterForm.ProjectId,
         };
@@ -151,6 +152,13 @@ public class ChapterController : ControllerBase
                 Messages = new List<string>() { "No matching Id" }
             });
         }
+
+        // TODO: Change all the order numbers of chapters greater than the deleted chapter
+        // Update range()
+
+
+
+
 
         await _unitOfWork.Chapters.RemoveAsync(chapter);
         if (!await _unitOfWork.SaveAsync())

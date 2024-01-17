@@ -1,1 +1,79 @@
-<p>project works!</p>
+<div class="container">
+  <a class="btn btn-s  mt-4"  routerLink="/projects">
+    <i class="bi bi-arrow-return-left me-2"></i>Back to project view
+  </a>
+</div>
+
+
+
+<div *ngIf="currentProject" class="main-container">
+
+  <app-chapter-form-modal
+    [projectId]="currentProject.id"
+    (signalParentComponent)="attachChapterToProject($event)"></app-chapter-form-modal>
+
+  <section class="space-sm">
+    <div class="container">
+      <div class="row mb-5"></div>
+
+      <div class="row flex-md-row card card-md">
+        <div class="card-body">
+          <div class="text-center mb-5">
+            <h1 class="h2 mb-2">{{currentProject.title}}<i class="bi bi-pencil-fill ms-2"></i></h1>
+            <!--(Modal activate button)-->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chapterFormModal"
+                    (click)="setupChapterModal(crudMethodModeEnum.CREATE, undefined)">
+              <i class="bi bi-plus-lg me-2"></i><b>Create new chapter</b>
+            </button>
+          </div>
+
+          <div class="" style="display: flex; flex-direction: row">
+            <div class="col-9">
+              <textarea asp-for="ModifiedText" class="form-control" style="min-height: 30rem" placeholder="ModifiedText" aria-label="With textarea"></textarea>
+            </div>
+
+            <div class="container card">
+              <div class="flex p-4 justify-between pb-4" style="display: flex; flex-direction: row; justify-content: space-between;">
+                <h5 class="card-title">Chapters ({{currentProject.chapters?.length}})</h5>
+                <i class="bi bi-plus-lg"></i>
+              </div>
+
+              <div *ngFor="let chapter of currentProject.chapters" class="" style="display: flex; flex-direction: column">
+<!--                <app-chapter-form-modal-->
+<!--                  [crudMethodMode]="crudMethodMode"-->
+<!--                  [inputChapter]="chapter"-->
+<!--                  [projectId]="currentProject.id"-->
+<!--                  (signalParentComponent)="attachChapterToProject($event)"></app-chapter-form-modal>-->
+    <!--            Chapter card-->
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <a style="text-decoration: none; color: black;" >
+                          {{chapter.title}}<i class="bi bi-pencil-fill ms-2"></i>
+                        </a>
+                      </h5>
+                      <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                        <a class="btn btn-s me-2" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.DELETE, chapter)">
+                          <i class="bi bi-x-lg me-2"></i>Remove
+                        </a>
+                        <a class="btn btn-s me-2" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.UPDATE, chapter)">
+                          <i class="bi bi-pencil-square me-2"></i>Edit
+                        </a>
+                        <a class="btn btn-s me-2" (click)="setCurrentChapter(chapter)">
+                          <i class="bi bi-arrow-right me-2"></i>Open
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end of container-->
+  </section>
+  <!--end of section-->
+</div>

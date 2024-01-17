@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ProjectsComponent } from './pages/projects/projects.component';
+import {ProjectComponent} from "./pages/project/project.component";
 
 const routes: Routes = [
   // Default redirect to home page
@@ -19,6 +20,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'projects', component: ProjectsComponent },
+      { path: 'project/:projectId', component: ProjectComponent },
       // { path: 'view-users', component: ViewUsersComponent },
       // { path: 'profile/:userId', component: ProfileComponent },
       // { path: 'edit-user/:userId', component: EditUserComponent },

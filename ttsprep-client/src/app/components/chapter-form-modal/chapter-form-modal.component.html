@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="chapterFormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.CREATE">Add Chapter</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE">Edit Chapter Details</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">Remove Chapter</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="chapterForm" (submit)="submitChapterForm()" autocomplete="off">
+        <div class="modal-body">
+          <div class="form-row form-group">
+            <div class="col">
+              <input formControlName="title" class="form-control form-control mb-3" placeholder="Title" />
+            </div>
+
+          </div>
+          <input type="hidden" formControlName="id" />
+          <input type="hidden" formControlName="orderNumber" />
+          <input type="hidden" formControlName="projectId" />
+
+          <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">
+            <p>Are you sure you want to remove the chapter ""?</p>
+          </div>
+        </div>
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.CREATE" [disabled]="chapterForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE" [disabled]="chapterForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" [disabled]="chapterForm.invalid" class="btn btn-danger" data-bs-dismiss="modal">Remove Chapter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,7 @@ export class ProjectsComponent implements OnInit {
   loggedInUser!: LoginResDto
   projects?: Project[] = []
   projects$?: Observable<Project[]>
-  currentProject?: any // When this is populated with Project data, open the project view component
+  currentProject?: Project // When this is populated with Project data, open the project view component
 
   projectsFiltered?: Project[] = []
   _filterText: string = ""

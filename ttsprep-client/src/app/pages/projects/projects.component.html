@@ -62,9 +62,13 @@
   <!--            <button class="btn btn-s btn-warning me-2" data-bs-toggle="modal" data-bs-target="#projectCreateModal">-->
   <!--              <i class="bi bi-pencil-square me-2"></i>Edit-->
   <!--            </button>-->
-              <button class="btn btn-s btn-primary me-2" (click)="setCurrentProject(project)">
+<!--              <button class="btn btn-s btn-primary me-2" (click)="setCurrentProject(project)">-->
+<!--                <i class="bi bi-arrow-right me-2"></i>Open-->
+<!--              </button>-->
+              <a class="btn btn-s btn-primary me-2" routerLink="/project/{{project.id}}">
                 <i class="bi bi-arrow-right me-2"></i>Open
-              </button>
+              </a>
+
             </div>
           </td>
         </tr>
@@ -73,6 +77,6 @@
   </div>
 </div>
 
-<div *ngIf="currentProject">
-  <app-project [loggedInUser]="loggedInUser" [inputProject]="currentProject" ></app-project>
-</div>
+<!--<div *ngIf="currentProject">-->
+<!--  <app-project [loggedInUser]="loggedInUser" [inputProject]="currentProject" ></app-project>-->
+<!--</div>-->
