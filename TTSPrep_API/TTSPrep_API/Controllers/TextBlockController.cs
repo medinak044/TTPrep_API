@@ -124,24 +124,37 @@ public class TextBlockController : ControllerBase
         #region Overwrite values
         textBlock.Label = textBlockForm.Label;
 
-        // Clearing original text: If text box is empty, make both original and modified text null
-        if (string.IsNullOrEmpty(textBlockForm.ModifiedText))
-        {
-            textBlock.OriginalText = string.Empty;
-            textBlock.ModifiedText = string.Empty;
-        }
-        // Submitting original text: If original text is null, save text as original and modified text
-        else if (string.IsNullOrEmpty(textBlock.OriginalText))
-        {
+        //// Clearing original text: If text box is empty, make both original and modified text null
+        //if (string.IsNullOrEmpty(textBlockForm.ModifiedText))
+        //{
+        //    textBlock.OriginalText = string.Empty;
+        //    textBlock.ModifiedText = string.Empty;
+        //}
+        //// Submitting original text: If original text is null, save text as original and modified text
+        //else if (string.IsNullOrEmpty(textBlock.OriginalText))
+        //{
+        //    textBlock.OriginalText = textBlockForm.ModifiedText;
+        //    textBlock.ModifiedText = textBlockForm.ModifiedText;
+        //}
+        //// Saving modified text: If original text is not null, save text as modified text
+        //else if (!string.IsNullOrEmpty(textBlock.OriginalText))
+        //{
+        //    textBlock.ModifiedText = textBlockForm.ModifiedText;
+        //}
 
-            textBlock.OriginalText = textBlockForm.ModifiedText;
-            textBlock.ModifiedText = textBlockForm.ModifiedText;
-        }
-        // Saving modified text: If original text is not null, save text as modified text
-        else if (!string.IsNullOrEmpty(textBlock.OriginalText))
-        {
-            textBlock.ModifiedText = textBlockForm.ModifiedText;
-        }
+        
+        textBlock.OriginalText = textBlockForm.OriginalText;
+        textBlock.ModifiedText = textBlockForm.ModifiedText;
+        // Original text is not null, modified text is null
+        //if (!string.IsNullOrEmpty(textBlockForm.OriginalText) && string.IsNullOrEmpty(textBlockForm.ModifiedText))
+        //{
+        //    textBlock.ModifiedText = textBlockForm.OriginalText;
+        //}
+        //else
+        //{
+        //    textBlock.ModifiedText = textBlockForm.ModifiedText;
+        //}
+
 
         textBlock.SpeakerId = textBlockForm.SpeakerId;
         #endregion

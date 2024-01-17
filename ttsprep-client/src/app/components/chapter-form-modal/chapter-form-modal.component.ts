@@ -12,12 +12,12 @@ export enum CrudMethodsEnum {
   styleUrls: ['./chapter-form-modal.component.css']
 })
 export class ChapterFormModalComponent implements OnInit{
-  crudMethodMode!: CrudMethodsEnum
-  inputChapter?: Chapter
+  inputChapter?: Chapter // Set by parent component
   @Input() projectId!: string
-  @Output() signalParentComponent = new EventEmitter<Chapter>() // Let parent component know to refresh its data
+  @Output() signalParentComponent: EventEmitter<Chapter> = new EventEmitter<Chapter>() // Let parent component know to refresh its data
 
-  crudMethodModeEnum: any = CrudMethodsEnum // Used to define what the form components will do
+  crudMethodModeEnum: any = CrudMethodsEnum
+  crudMethodMode!: CrudMethodsEnum
 
   chapterForm: FormGroup = this.fb.group({
     id: [''],
@@ -67,8 +67,8 @@ export class ChapterFormModalComponent implements OnInit{
     let chapter: Chapter = this.chapterForm.value
     chapter.projectId = this.projectId // Include project id
     if (this.crudMethodMode == this.crudMethodModeEnum.CREATE) {this.createChapter(chapter)}
-    if (this.crudMethodMode == this.crudMethodModeEnum.UPDATE) {this.updateChapter(chapter)}
-    if (this.crudMethodMode == this.crudMethodModeEnum.DELETE) {this.removeChapter(chapter.id)}
+    else if (this.crudMethodMode == this.crudMethodModeEnum.UPDATE) {this.updateChapter(chapter)}
+    else if (this.crudMethodMode == this.crudMethodModeEnum.DELETE) {this.removeChapter(chapter.id)}
   }
 
   getChapterById(chapterId: string) {
@@ -100,7 +100,7 @@ export class ChapterFormModalComponent implements OnInit{
     }
   }
 
-  // WARNING: Make sure api changes ALL the affected order numbers (if 3 was deleted, change only > 3)
+  // TODO: Make sure api changes ALL the affected order numbers (if 3 was deleted, change only > 3)
   removeChapter(chapterId: string) {
     if (chapterId.length > 0) {
       this.chapterService.removeChapter(chapterId).subscribe({

@@ -9,6 +9,8 @@
     [projectId]="currentProject.id"
     (signalParentComponent)="attachChapterToProject($event)"></app-chapter-form-modal>
 
+  <app-textblock-form-modal (signalParentComponent)="getProjectById()"></app-textblock-form-modal>
+
   <section class="space-sm">
     <div class="container" style="min-width: 97%">
       <div class="row flex-md-row card-md">
@@ -29,32 +31,45 @@
 
             <!-- Text column -->
             <div class="col-9 card" style="min-height: 35rem">
-              <div *ngIf="currentChapter" style="display: flex; flex-direction: row">
-                <h5 class="card-body text-center">{{currentChapter?.title}}</h5>
-                <i class="bi bi-x-lg me-2 mt-1 clickable-fade" (click)="setCurrentChapter(undefined)"></i>
+
+              <div *ngIf="currentChapter" style="display: flex; flex-direction: column;">
+                <div style="display: flex; flex-direction: row;">
+                  <h5 class="card-body text-center">{{currentChapter.title}}
+                    <i class="bi bi-x-lg me-2 mt-1 clickable-fade" style="float: right;"
+                       (click)="setCurrentChapter(undefined)"></i></h5>
+                </div>
+
+                <div class="container" style="text-align: center">
+                  <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
+                          (click)="setUpTextBlockModal(crudMethodModeEnum.CREATE, undefined)">
+                    <i class="bi bi-plus-lg me-2"></i><b>Add text</b>
+                  </button>
+                </div>
               </div>
+
 <!--              TODO: Make it so that individual text blocks (cards) contain textareas-->
               <div *ngIf="currentChapter" class="container" style="display: flex; flex-direction: column">
-                <div *ngFor="let chapter of currentProject.chapters" class="" style="display: flex; flex-direction: column">
-
-                  <!--            TextBox card-->
+                <div *ngFor="let textBlock of currentChapter.textBlocks" class="" style="display: flex; flex-direction: column">
+                  <!-- TextBlock card -->
                   <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">
                         <a style="text-decoration: none; color: black;" >
-                          {{chapter.title}}<i class="bi bi-pencil-fill ms-2 clickable-fade"></i>
+                          (Speaker)<i class="bi bi-pencil-fill ms-2 clickable-fade"></i>
                         </a>
                       </h5>
                       <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.DELETE, chapter)">
+                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
+                           (click)="setUpTextBlockModal(crudMethodModeEnum.DELETE, textBlock)">
                           <i class="bi bi-x-lg me-2"></i>Remove
                         </a>
-                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#chapterFormModal" (click)="setupChapterModal(crudMethodModeEnum.UPDATE, chapter)">
+                        <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
+                           (click)="setUpTextBlockModal(crudMethodModeEnum.UPDATE, textBlock)">
                           <i class="bi bi-pencil-square me-2"></i>Edit
                         </a>
-                        <a class="btn btn-s me-2 clickable-fade" (click)="setCurrentChapter(chapter)">
-                          <i class="bi bi-arrow-right me-2"></i>Open
-                        </a>
+<!--                        <a class="btn btn-s me-2 clickable-fade">-->
+<!--                          <i class="bi bi-arrow-right me-2"></i>Open-->
+<!--                        </a>-->
                       </div>
                     </div>
                   </div>

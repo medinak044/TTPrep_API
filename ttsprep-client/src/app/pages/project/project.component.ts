@@ -13,6 +13,8 @@ import {
   ChapterFormModalComponent,
   CrudMethodsEnum
 } from "../../components/chapter-form-modal/chapter-form-modal.component";
+import {TextblockFormModalComponent} from "../../components/textblock-block/textblock-form-modal.component";
+import {TextBlock} from "../../models/textBlock";
 
 @Component({
   selector: 'app-project',
@@ -30,6 +32,7 @@ export class ProjectComponent implements OnInit {
   crudMethodModeEnum: any = CrudMethodsEnum // Used to define what the form components will do
   crudMethodMode!: CrudMethodsEnum
   @ViewChild(ChapterFormModalComponent) chapterFormModalComponent!: ChapterFormModalComponent
+  @ViewChild(TextblockFormModalComponent) textblockBlockComponent!: TextblockFormModalComponent
 
   constructor(
     public appUserService: AppUserService,
@@ -51,6 +54,7 @@ export class ProjectComponent implements OnInit {
     this.currentChapter = chapter
   }
 
+  // Must set up Bootstrap modal data properly on click
   setupChapterModal(crudMethodMode: CrudMethodsEnum, chapter?: Chapter) {
     // this.setCurrentChapter(chapter)
 
@@ -93,6 +97,7 @@ export class ProjectComponent implements OnInit {
     })
   }
 
+  // Resets page data
   async getProjectById() {
     this.projectService.getProjectById(this.projectIdParam).subscribe({
       next: (res: Project) => {
@@ -103,7 +108,7 @@ export class ProjectComponent implements OnInit {
           .then(() => {
             if (this.currentProject.chapters) {
               // this.currentChapter = this.currentProject.chapters ? this.currentProject.chapters[0] : undefined
-              this.currentChapter = this.currentProject.chapters[0]
+              this.setCurrentChapter(this.currentProject.chapters[0])
             }
           })
 
@@ -123,35 +128,12 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  // createChapter(chapterForm: Chapter) {
-  //   this.chapterService.createChapter(chapterForm).subscribe({
-  //     next: (res: Chapter) => {
-  //       this.getProjectById() // Update visual display
-  //     },
-  //     error: (err) => { console.log(err) }
-  //   })
-  // }
-  //
-  // editChapter(chapterForm: Chapter) {
-  //   if (chapterForm) {
-  //     this.chapterService.updateChapter(chapterForm).subscribe({
-  //       next: (res: Chapter) => {
-  //         this.getProjectById() // Update visual display
-  //       },
-  //       error: (err) => { console.log(err) }
-  //     })
-  //   }
-  // }
-  //
-  // removeChapter(chapterId: string) {
-  //   if (chapterId.length > 0) {
-  //     this.chapterService.removeChapter(chapterId).subscribe({
-  //       next: (res: Chapter) => {
-  //         this.getProjectById() // Update visual display
-  //       },
-  //       error: (err) => { console.log(err) }
-  //     })
-  //   }
-  // }
+  // Must set up Bootstrap modal data properly on click
+  setUpTextBlockModal(crudMethodMode: CrudMethodsEnum, textBlock?: TextBlock) {
+    this.textblockBlockComponent.crudMethodMode = crudMethodMode
+    this.textblockBlockComponent.currentChapter = this.currentChapter
+    this.textblockBlockComponent.textBlock = textBlock
+    this.textblockBlockComponent.initiateForm()
+  }
 
 }

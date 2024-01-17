@@ -3,7 +3,7 @@ import {TextBlockLabel} from "./textBlockLabel";
 
 export interface TextBlock {
   id: string
-  label?: string
+  label?: string // X
   orderNumber: number
   originalText?: string
   modifiedText?: string

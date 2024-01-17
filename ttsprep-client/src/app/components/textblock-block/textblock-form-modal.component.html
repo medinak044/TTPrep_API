@@ -1,0 +1,41 @@
+<!-- Modal -->
+<div class="modal fade" id="textBlockFormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.CREATE">Add Text</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE">Edit Text Details</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">Remove Text</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="formGroup" (submit)="onSubmit()" autocomplete="off">
+        <div class="modal-body">
+          <div class="form-row form-group">
+            <div class="col">
+              <input formControlName="originalText" class="form-control form-control mb-3" placeholder="Original Text" />
+              <input formControlName="modifiedText" class="form-control form-control mb-3" placeholder="Modified Text" />
+            </div>
+            <!-- Dropdown for available text block labels -->
+            <!-- Dropdown for available speakers -->
+          </div>
+          <input type="hidden" formControlName="id" />
+          <input type="hidden" formControlName="label" />
+          <input type="hidden" formControlName="orderNumber" />
+          <input type="hidden" formControlName="chapterId" />
+          <input type="hidden" formControlName="speakerId" />
+
+          <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">
+            <p>Are you sure you want to remove this text block?</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.CREATE" [disabled]="formGroup.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE" [disabled]="formGroup.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" [disabled]="formGroup.invalid" class="btn btn-danger" data-bs-dismiss="modal">Remove</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

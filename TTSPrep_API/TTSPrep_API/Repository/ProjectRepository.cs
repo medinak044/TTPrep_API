@@ -36,6 +36,12 @@ public class ProjectRepository: Repository<Project>, IProjectRepository
         _context.Entry(project).Collection(p => p.Words).Load();
         _context.Entry(project).Collection(p => p.Speakers).Load();
 
+        // Include nested navigation properties
+        foreach (var chapter in project.Chapters)
+        {
+            _context.Entry(chapter).Collection(c => c.TextBlocks).Load();
+        }
+        
         // Explicitly load Project data so that the navigation properties will load their values
         //List<Project> projects = _context.Projects.ToList();
 
