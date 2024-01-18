@@ -76,10 +76,12 @@ public class ChapterController : ControllerBase
         }
         orderNumber += 1; // Order number must at least start at 1
 
+        string newId = Guid.NewGuid().ToString();
+
         // Map values
         var chapter = new Chapter
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = newId,
             Title = chapterForm.Title.IsNullOrEmpty() ? $"Chapter {orderNumber}" : chapterForm.Title,
             OrderNumber = orderNumber,
             ProjectId = chapterForm.ProjectId,
@@ -93,6 +95,27 @@ public class ChapterController : ControllerBase
                 Success = false,
                 Messages = new List<string>() { "Something went wrong while saving" }
             });
+        }
+        else
+        {
+            #region Add a default TextBlockLabel
+            var textBlockLabel = new TextBlockLabel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Narration",
+                ChapterId = newId
+            };
+
+            await _unitOfWork.TextBlockLabels.AddAsync(textBlockLabel);
+            if (!await _unitOfWork.SaveAsync())
+            {
+                return BadRequest(new AuthResult()
+                {
+                    Success = false,
+                    Messages = new List<string>() { "Something went wrong while saving" }
+                });
+            }
+            #endregion
         }
 
         return Ok(chapter);

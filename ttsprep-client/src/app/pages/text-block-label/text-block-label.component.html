@@ -1,1 +1,52 @@
-<p>text-block-label works!</p>
+<div class="container">
+  <a class="btn btn-s mt-3 mb-3 clickable-fade"  routerLink="/project/{{projectIdParam}}">
+    <i class="bi bi-arrow-left me-2 "></i>Back to project view
+  </a>
+</div>
+
+<div *ngIf="currentChapter">
+  <app-textblocklabel-form-modal (signalParentComponent)="getChapterById()"></app-textblocklabel-form-modal>
+
+  <div class="text-center">
+    <h1>Text Block Labels ({{currentChapter.textBlockLabels?.length}})</h1>
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#textBlockLabelFormModal"
+            (click)="setupTextBlockLabelModal(crudMethodModeEnum.CREATE, undefined)">
+      <i class="bi bi-plus-lg me-2"></i><b>Add a label</b>
+    </button>
+
+  </div>
+
+  <div class="container">
+    <input type="text" placeholder="Search by name" [(ngModel)]="filterText">
+  </div>
+
+  <div class="text-center mt-3">
+    <table class="table table-striped container">
+      <thead >
+      <th>Name</th>
+      <th></th> <!-- Option buttons -->
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let textBlockLabel of textBlockLabelsFiltered">
+        <td>{{ textBlockLabel.name }}</td>
+        <td>
+          <div *ngIf="textBlockLabel.name != 'Narration'" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <button class="btn me-2" data-bs-toggle="modal" data-bs-target="#textBlockLabelFormModal"
+                    (click)="setupTextBlockLabelModal(crudMethodModeEnum.DELETE, textBlockLabel)">
+              <i class="bi bi-x-lg me-2"></i>Remove
+            </button>
+
+            <button class="btn e-2" data-bs-toggle="modal" data-bs-target="#textBlockLabelFormModal"
+                    (click)="setupTextBlockLabelModal(crudMethodModeEnum.UPDATE, textBlockLabel)">
+              <i class="bi bi-pencil-square me-2"></i>Edit
+            </button>
+
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

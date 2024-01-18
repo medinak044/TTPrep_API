@@ -12,6 +12,7 @@ import {CrudMethodsEnum} from "../../components/chapter-form-modal/chapter-form-
   styleUrls: ['./speakers.component.css']
 })
 export class SpeakersComponent implements OnInit  {
+  crudMethodModeEnum: any = CrudMethodsEnum
   projectIdParam!: string
   currentProject!: Project
 
@@ -19,7 +20,6 @@ export class SpeakersComponent implements OnInit  {
   speakersFiltered?: Speaker[] = []
   _filterText: string = ""
 
-  crudMethodModeEnum: any = CrudMethodsEnum
   @ViewChild(SpeakerFormModalComponent) speakerFormModalComponent!: SpeakerFormModalComponent
 
   constructor(

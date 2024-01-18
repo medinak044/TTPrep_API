@@ -31,6 +31,7 @@ public class ChapterRepository: Repository<Chapter>, IChapterRepository
     {
         Chapter chapter = await _context.Chapters.FindAsync(projectId);
         _context.Entry(chapter).Collection(c => c.TextBlocks).Load();
+        _context.Entry(chapter).Collection(c => c.TextBlockLabels).Load();
 
         return chapter;
     }
