@@ -40,6 +40,7 @@ public class ProjectRepository: Repository<Project>, IProjectRepository
         foreach (var chapter in project.Chapters)
         {
             _context.Entry(chapter).Collection(c => c.TextBlocks).Load();
+            _context.Entry(chapter).Collection(c => c.TextBlockLabels).Load();
         }
         
         // Explicitly load Project data so that the navigation properties will load their values

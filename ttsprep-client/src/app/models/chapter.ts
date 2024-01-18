@@ -7,5 +7,5 @@ export interface Chapter {
   orderNumber: number
   projectId: string
   textBlocks?: TextBlock[]
-  TextBlockLabels?: TextBlockLabel[]
+  textBlockLabels?: TextBlockLabel[]
 }

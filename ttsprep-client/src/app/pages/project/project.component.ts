@@ -15,6 +15,8 @@ import {
 } from "../../components/chapter-form-modal/chapter-form-modal.component";
 import {TextblockFormModalComponent} from "../../components/textblock-block/textblock-form-modal.component";
 import {TextBlock} from "../../models/textBlock";
+import {Speaker} from "../../models/speaker";
+import {TextBlockLabel} from "../../models/textBlockLabel";
 
 @Component({
   selector: 'app-project',
@@ -52,6 +54,7 @@ export class ProjectComponent implements OnInit {
 
   setCurrentChapter(chapter?: Chapter) {
     this.currentChapter = chapter
+    this.prepareTextBlocks(this.currentChapter) // Sort the current chapter's text blocks and assign their respective speaker and label
   }
 
   // Must set up Bootstrap modal data properly on click
@@ -122,6 +125,16 @@ export class ProjectComponent implements OnInit {
       this.projectService.updateProject(projectReqDto).subscribe({
         next: (res: Project) => {
           this.currentProject = res // Update visual display
+
+          // Make sure the chapters are sorted
+          this.sortChapters()
+            // Assign the first chapter in the sorted list as the current chapter by default
+            .then(() => {
+              if (this.currentProject.chapters) {
+                // this.currentChapter = this.currentProject.chapters ? this.currentProject.chapters[0] : undefined
+                this.setCurrentChapter(this.currentProject.chapters[0])
+              }
+            })
         },
         error: (err) => { console.log(err) }
       })
@@ -135,5 +148,30 @@ export class ProjectComponent implements OnInit {
     this.textblockBlockComponent.textBlock = textBlock
     this.textblockBlockComponent.initiateForm()
   }
+
+  prepareTextBlocks(chapter?: Chapter) {
+    // Check if any text blocks exist in the chapter before proceeding further
+    if (!chapter?.textBlocks) {return}
+    // Sort by order number
+    chapter.textBlocks.sort((a: TextBlock, b: TextBlock) => {
+      return a.orderNumber - b.orderNumber
+    })
+
+    chapter.textBlocks.forEach((textBlock: TextBlock) => {
+      // Assign speaker object data to associated text blocks
+      if (textBlock.speakerId) {
+        textBlock.speaker = this.currentProject.speakers?.find((s: Speaker) => s.id == textBlock.speakerId)
+      }
+
+      // Assign text block label object data to associated text blocks
+      if (textBlock.textBlockLabelId && chapter.textBlockLabels) {
+        textBlock.textBlockLabel = chapter.textBlockLabels.find((t: TextBlockLabel) => t.id == textBlock.textBlockLabelId)
+      }
+    })
+  }
+
+
+
+
 
 }

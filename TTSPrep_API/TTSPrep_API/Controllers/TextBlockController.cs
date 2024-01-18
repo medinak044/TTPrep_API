@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using TTSPrep_API.Helpers;
 using TTSPrep_API.Models;
 using TTSPrep_API.Repository.IRepository;
@@ -86,7 +87,7 @@ public class TextBlockController : ControllerBase
             Label = textBlockForm.Label,
             OrderNumber = orderNumber,
             OriginalText = textBlockForm.OriginalText,
-            ModifiedText = textBlockForm.ModifiedText,
+            ModifiedText = textBlockForm.ModifiedText.IsNullOrEmpty() ? textBlockForm.OriginalText : textBlockForm.ModifiedText,
             ChapterId = textBlockForm.ChapterId,
             SpeakerId = textBlockForm.SpeakerId
         };
