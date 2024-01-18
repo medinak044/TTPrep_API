@@ -15,10 +15,10 @@ export class TextblockFormModalComponent implements OnInit {
   currentProject?: Project
   currentChapter?: Chapter // The current chapter from the parent component
   textBlock?: TextBlock
-  crudMethodMode!: CrudMethodsEnum
   @Output() signalParentComponent: EventEmitter<TextBlock> = new EventEmitter<TextBlock>() // Update the specific text block
 
-  crudMethodModeEnum = CrudMethodsEnum;
+  crudMethodModeEnum = CrudMethodsEnum
+  crudMethodMode!: CrudMethodsEnum
 
   formGroup: FormGroup = this.fb.group({
     id: [''],
@@ -77,7 +77,6 @@ export class TextblockFormModalComponent implements OnInit {
         textBlockLabelId: [textBlockLabelId],
       })
     }
-
   }
 
   onSubmit() {

@@ -14,10 +14,12 @@
             <div class="col">
               <label style="font-size: 75%; opacity: 0.75;">Text Block Label</label>
               <select formControlName="textBlockLabelId" class="form-select mb-3">
+                <option value=""><i>(None)</i></option>
                 <option *ngFor="let label of currentChapter?.textBlockLabels" value="{{label.id}}">{{ label.name }}</option>
               </select>
               <label style="font-size: 75%; opacity: 0.75;">Speaker</label>
               <select formControlName="speakerId" class="form-select mb-3">
+                <option value=""><i>(None)</i></option>
                 <option *ngFor="let speaker of currentProject?.speakers" value="{{speaker.id}}">{{ speaker.name }}</option>
               </select>
 

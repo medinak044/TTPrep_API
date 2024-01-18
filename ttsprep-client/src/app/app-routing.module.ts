@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { AuthGuard } from './guards/auth.guard';
 import { ProjectsComponent } from './pages/projects/projects.component';
 import {ProjectComponent} from "./pages/project/project.component";
+import {SpeakersComponent} from "./pages/speakers/speakers.component";
 
 const routes: Routes = [
   // Default redirect to home page
@@ -21,6 +22,7 @@ const routes: Routes = [
     children: [
       { path: 'projects', component: ProjectsComponent },
       { path: 'project/:projectId', component: ProjectComponent },
+      { path: 'speakers/:projectId', component: SpeakersComponent },
       // { path: 'view-users', component: ViewUsersComponent },
       // { path: 'profile/:userId', component: ProfileComponent },
       // { path: 'edit-user/:userId', component: EditUserComponent },
@@ -38,7 +40,10 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor, multi: true
+    },
   ]
 })
 export class AppRoutingModule { }

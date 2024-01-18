@@ -16,6 +16,8 @@ import { ProjectFormModalComponent } from './components/project-form-modal/proje
 import { ProjectComponent } from './pages/project/project.component';
 import { ChapterFormModalComponent } from './components/chapter-form-modal/chapter-form-modal.component';
 import { TextblockFormModalComponent } from './components/textblock-block/textblock-form-modal.component';
+import { SpeakersComponent } from './pages/speakers/speakers.component';
+import { SpeakerFormModalComponent } from './components/speaker-form-modal/speaker-form-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { TextblockFormModalComponent } from './components/textblock-block/textbl
     ProjectFormModalComponent,
     ProjectComponent,
     ChapterFormModalComponent,
-    TextblockFormModalComponent
+    TextblockFormModalComponent,
+    SpeakersComponent,
+    SpeakerFormModalComponent
   ],
   imports: [
     BrowserModule,

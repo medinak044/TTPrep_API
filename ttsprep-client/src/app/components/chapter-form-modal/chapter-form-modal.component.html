@@ -10,18 +10,17 @@
       </div>
       <form [formGroup]="chapterForm" (submit)="submitChapterForm()" autocomplete="off">
         <div class="modal-body">
-          <div class="form-row form-group">
+          <div *ngIf="crudMethodMode !== crudMethodModeEnum.DELETE" class="form-row form-group">
             <div class="col">
               <input formControlName="title" class="form-control form-control mb-3" placeholder="Title" />
             </div>
-
+            <input type="hidden" formControlName="id" />
+            <input type="hidden" formControlName="orderNumber" />
+            <input type="hidden" formControlName="projectId" />
           </div>
-          <input type="hidden" formControlName="id" />
-          <input type="hidden" formControlName="orderNumber" />
-          <input type="hidden" formControlName="projectId" />
 
-          <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">
-            <p>Are you sure you want to remove the chapter ""?</p>
+          <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" class="modal-body">
+            <p>Are you sure you want to remove the chapter "{{inputChapter?.title}}"?</p>
           </div>
         </div>
 

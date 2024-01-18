@@ -1,5 +1,3 @@
-
-
 <div *ngIf="!currentProject">
   <app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="createProject($event)"></app-project-form-modal>
 
@@ -15,7 +13,7 @@
 
   <div class="container">
     <input type="text"
-           placeholder="Search by event title"
+           placeholder="Search by project title"
            [(ngModel)]="filterText"
     >
   </div>
@@ -36,11 +34,11 @@
           <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
           <td>
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button class="btn btn-s btn-danger me-2" data-bs-toggle="modal" data-bs-target="#projectDeleteModal">
+              <button class="btn btn-s btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
                 <i class="bi bi-x-lg me-2"></i>Remove
               </button>
               <!--  Delete confirmation modal -->
-              <div class="modal fade" id="projectDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -52,19 +50,12 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                      <button class="btn btn-primary" data-bs-dismiss="modal" (click)="removeProject(project.id)">Remove Project</button>
+                      <button class="btn btn-danger" data-bs-dismiss="modal" (click)="removeProject(project.id)">Remove Project</button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Project edit button should only be available when a project is in focus-->
-  <!--            <button class="btn btn-s btn-warning me-2" data-bs-toggle="modal" data-bs-target="#projectFormModal">-->
-  <!--              <i class="bi bi-pencil-square me-2"></i>Edit-->
-  <!--            </button>-->
-<!--              <button class="btn btn-s btn-primary me-2" (click)="setCurrentProject(project)">-->
-<!--                <i class="bi bi-arrow-right me-2"></i>Open-->
-<!--              </button>-->
               <a class="btn btn-s btn-primary me-2" routerLink="/project/{{project.id}}">
                 <i class="bi bi-arrow-right me-2"></i>Open
               </a>
@@ -76,7 +67,3 @@
     </table>
   </div>
 </div>
-
-<!--<div *ngIf="currentProject">-->
-<!--  <app-project [loggedInUser]="loggedInUser" [inputProject]="currentProject" ></app-project>-->
-<!--</div>-->
