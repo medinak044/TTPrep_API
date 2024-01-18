@@ -145,16 +145,16 @@ public class TextBlockController : ControllerBase
 
         
         textBlock.OriginalText = textBlockForm.OriginalText;
-        textBlock.ModifiedText = textBlockForm.ModifiedText;
+
         // Original text is not null, modified text is null
-        //if (!string.IsNullOrEmpty(textBlockForm.OriginalText) && string.IsNullOrEmpty(textBlockForm.ModifiedText))
-        //{
-        //    textBlock.ModifiedText = textBlockForm.OriginalText;
-        //}
-        //else
-        //{
-        //    textBlock.ModifiedText = textBlockForm.ModifiedText;
-        //}
+        if (!string.IsNullOrEmpty(textBlockForm.OriginalText) && string.IsNullOrEmpty(textBlockForm.ModifiedText))
+        {
+            textBlock.ModifiedText = textBlockForm.OriginalText;
+        }
+        else
+        {
+            textBlock.ModifiedText = textBlockForm.ModifiedText;
+        }
 
 
         textBlock.SpeakerId = textBlockForm.SpeakerId;

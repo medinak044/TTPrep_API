@@ -32,9 +32,11 @@ export class ProjectComponent implements OnInit {
   // chapters$?: Observable<Chapter[]>
   currentChapter?: Chapter
   crudMethodModeEnum: any = CrudMethodsEnum // Used to define what the form components will do
-  crudMethodMode!: CrudMethodsEnum
+  // crudMethodMode!: CrudMethodsEnum
   @ViewChild(ChapterFormModalComponent) chapterFormModalComponent!: ChapterFormModalComponent
   @ViewChild(TextblockFormModalComponent) textblockBlockComponent!: TextblockFormModalComponent
+
+  copyMessageTextBlockId?: string
 
   constructor(
     public appUserService: AppUserService,
@@ -144,6 +146,7 @@ export class ProjectComponent implements OnInit {
   // Must set up Bootstrap modal data properly on click
   setUpTextBlockModal(crudMethodMode: CrudMethodsEnum, textBlock?: TextBlock) {
     this.textblockBlockComponent.crudMethodMode = crudMethodMode
+    this.textblockBlockComponent.currentProject = this.currentProject
     this.textblockBlockComponent.currentChapter = this.currentChapter
     this.textblockBlockComponent.textBlock = textBlock
     this.textblockBlockComponent.initiateForm()
@@ -171,7 +174,25 @@ export class ProjectComponent implements OnInit {
   }
 
 
+  // When user clicks on a speaker dropdown
+  populateSpeakerList() {
+
+  }
 
 
+  copyTextToClipBoard(textBlockId: string, bodyText?: string, speakerName?: string) {
+    if (!speakerName) {
+      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`);
+      console.log(`${bodyText}`)
+    } else {
+      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`);
+      console.log(`${speakerName}: ${bodyText}`)
+    }
 
+    this.copyMessageTextBlockId = textBlockId
+
+    setTimeout(() => {
+      this.copyMessageTextBlockId = ""
+    }, 3000);
+  }
 }

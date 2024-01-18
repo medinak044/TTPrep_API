@@ -3,8 +3,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.CREATE">Add Text</h1>
-        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE">Edit Text Details</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.CREATE">Add Text Block</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE">Edit Text Block Details</h1>
         <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">Remove Text</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -12,17 +12,37 @@
         <div class="modal-body">
           <div class="form-row form-group">
             <div class="col">
-              <input formControlName="originalText" class="form-control form-control mb-3" placeholder="Original Text" />
-              <input formControlName="modifiedText" class="form-control form-control mb-3" placeholder="Modified Text" />
+              <label style="font-size: 75%; opacity: 0.75;">Text Block Label</label>
+              <select formControlName="textBlockLabelId" class="form-select mb-3">
+                <option *ngFor="let label of currentChapter?.textBlockLabels" value="{{label.id}}">{{ label.name }}</option>
+              </select>
+              <label style="font-size: 75%; opacity: 0.75;">Speaker</label>
+              <select formControlName="speakerId" class="form-select mb-3">
+                <option *ngFor="let speaker of currentProject?.speakers" value="{{speaker.id}}">{{ speaker.name }}</option>
+              </select>
+
+              <label style="font-size: 75%; opacity: 0.75;">Original text</label>
+              <textarea formControlName="originalText" class="form-control form-control mb-3"
+                        style="height: .5em;"
+                        placeholder="Original Text"></textarea>
+              <div style="display: flex; flex-direction: row">
+                <span class="clickable-fade" style="font-size: 75%; opacity: 0.75;"
+                (click)="copyOriginalTextToModifiedText()">
+                  Modified text (Click to transfer original text)
+                  <i class="bi bi-arrow-down ms-1"></i>
+                </span>
+
+              </div>
+
+              <textarea formControlName="modifiedText" class="form-control form-control mb-3"
+                        style="min-height: 25em;"
+                        placeholder="Modified Text"></textarea>
             </div>
-            <!-- Dropdown for available text block labels -->
-            <!-- Dropdown for available speakers -->
           </div>
+
           <input type="hidden" formControlName="id" />
-          <input type="hidden" formControlName="label" />
           <input type="hidden" formControlName="orderNumber" />
           <input type="hidden" formControlName="chapterId" />
-          <input type="hidden" formControlName="speakerId" />
 
           <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">
             <p>Are you sure you want to remove this text block?</p>

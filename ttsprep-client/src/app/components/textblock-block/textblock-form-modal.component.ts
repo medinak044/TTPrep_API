@@ -4,6 +4,7 @@ import {TextBlockService} from "../../services/text-block.service";
 import {TextBlock} from "../../models/textBlock";
 import {CrudMethodsEnum} from "../chapter-form-modal/chapter-form-modal.component";
 import {Chapter} from "../../models/chapter";
+import {Project} from "../../models/project";
 
 @Component({
   selector: 'app-textblock-form-modal',
@@ -11,6 +12,7 @@ import {Chapter} from "../../models/chapter";
   styleUrls: ['./textblock-form-modal.component.css']
 })
 export class TextblockFormModalComponent implements OnInit {
+  currentProject?: Project
   currentChapter?: Chapter // The current chapter from the parent component
   textBlock?: TextBlock
   crudMethodMode!: CrudMethodsEnum
@@ -20,12 +22,12 @@ export class TextblockFormModalComponent implements OnInit {
 
   formGroup: FormGroup = this.fb.group({
     id: [''],
-    label: [''],
     orderNumber: [1],
     originalText: [''],
     modifiedText: [''],
     chapterId: [''],
     speakerId: [''],
+    textBlockLabelId: [''],
   })
 
   constructor(
@@ -42,12 +44,12 @@ export class TextblockFormModalComponent implements OnInit {
     if (this.crudMethodMode == this.crudMethodModeEnum.CREATE) {
       this.formGroup = this.fb.group({
         id: [''],
-        label: [''],
         orderNumber: [1],
         originalText: [''],
         modifiedText: [''],
         chapterId: [''],
         speakerId: [''],
+        textBlockLabelId: [''],
       })
     }
 
@@ -57,22 +59,22 @@ export class TextblockFormModalComponent implements OnInit {
       || this.crudMethodMode == this.crudMethodModeEnum.DELETE)) {
       const {
         id,
-        label,
         orderNumber,
         originalText,
         modifiedText,
         chapterId,
         speakerId,
+        textBlockLabelId,
       } = this.textBlock
 
       this.formGroup = this.fb.group({
         id: [id],
-        label: [label],
         orderNumber: [orderNumber],
         originalText: [originalText],
         modifiedText: [modifiedText],
         chapterId: [chapterId],
         speakerId: [speakerId],
+        textBlockLabelId: [textBlockLabelId],
       })
     }
 
@@ -120,6 +122,12 @@ export class TextblockFormModalComponent implements OnInit {
         error: (err) => { console.log(err) }
       })
     }
+  }
+
+  copyOriginalTextToModifiedText() {
+    this.formGroup.patchValue({
+      modifiedText: this.textBlock?.originalText
+    })
   }
 
 }

@@ -44,7 +44,7 @@
                 <div class="container" style="text-align: center">
                   <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
                           (click)="setUpTextBlockModal(crudMethodModeEnum.CREATE, undefined)">
-                    <i class="bi bi-plus-lg me-2"></i><b>Add text</b>
+                    <i class="bi bi-plus-lg me-2"></i><b>Add text block</b>
                   </button>
                 </div>
               </div>
@@ -55,12 +55,14 @@
                   <!-- TextBlock card -->
                   <div class="card">
                     <div class="card-body">
-                      <p class="card-title">
-                        <a style="text-decoration: none; color: black;" >
-                          (Speaker)<i class="bi bi-caret-down-fill ms-2 clickable-fade"></i>
-                        </a>
-                      </p>
-                      <p>{{textBlock.modifiedText}}</p>
+                      <div class="card-title">
+                        <p *ngIf="textBlock.speaker" class="clickable-fade" (click)="copyTextToClipBoard(textBlock.id, textBlock.modifiedText, textBlock.speaker.name)">
+                          <b>{{textBlock.speaker.name}}:</b></p>
+                      </div>
+
+                      <p class="clickable-fade" (click)="copyTextToClipBoard(textBlock.id, textBlock.modifiedText)">
+                        {{textBlock.modifiedText}}</p>
+
                       <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                         <a class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
                            (click)="setUpTextBlockModal(crudMethodModeEnum.DELETE, textBlock)">
@@ -70,9 +72,7 @@
                            (click)="setUpTextBlockModal(crudMethodModeEnum.UPDATE, textBlock)">
                           <i class="bi bi-pencil-square me-2"></i>Edit
                         </a>
-<!--                        <a class="btn btn-s me-2 clickable-fade">-->
-<!--                          <i class="bi bi-arrow-right me-2"></i>Open-->
-<!--                        </a>-->
+                        <span *ngIf="copyMessageTextBlockId == textBlock.id" style="font-size: 75%; opacity: 0.75; color: salmon"> Text copied! </span>
                       </div>
                     </div>
                   </div>
