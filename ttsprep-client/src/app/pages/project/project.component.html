@@ -20,16 +20,11 @@
             <a class="clickable-fade me-2" style="text-decoration: inherit; color: inherit;" routerLink="/speakers/{{currentProject.id}}">
               Speakers
             </a>
-            <!--(Modal activate button)-->
-<!--            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chapterFormModal"-->
-<!--                    (click)="setupChapterModal(crudMethodModeEnum.CREATE, undefined)">-->
-<!--              <i class="bi bi-plus-lg me-2"></i><b>Create new chapter</b>-->
-<!--            </button>-->
+
           </div>
 
           <div style="display: flex; flex-direction: row; column-gap: 0.6em">
-
-            <!-- Text column -->
+            <!-- Chapter text column -->
             <div class="col-9 card" style="min-height: 35rem">
 
               <div *ngIf="currentChapter" style="display: flex; flex-direction: column;">
@@ -39,10 +34,13 @@
                        (click)="setCurrentChapter(undefined)"></i></h5>
                 </div>
 
-                <div class="container" style="text-align: center">
-                  <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
+                <div class="container" style="text-align: match-parent">
+                  <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#textBlockFormModal"
                           (click)="setUpTextBlockModal(crudMethodModeEnum.CREATE, undefined)">
-                    <i class="bi bi-plus-lg me-2"></i><b>Add text block</b>
+                    <i class="bi bi-plus-lg me-2"></i>Add text block
+                  </button>
+                  <button type="button" class="btn" routerLink="textBlockLabel/{{currentChapter}}">
+                            View text block labels<i class="bi bi-arrow-right ms-2"></i>
                   </button>
                 </div>
               </div>
