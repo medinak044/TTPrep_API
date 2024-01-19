@@ -11,6 +11,7 @@ import { ProjectsComponent } from './pages/projects/projects.component';
 import {ProjectComponent} from "./pages/project/project.component";
 import {SpeakersComponent} from "./pages/speakers/speakers.component";
 import {TextBlockLabelComponent} from "./pages/text-block-label/text-block-label.component";
+import {WordsComponent} from "./pages/words/words.component";
 
 const routes: Routes = [
   // Default redirect to home page
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'projects', component: ProjectsComponent },
       { path: 'project/:projectId', component: ProjectComponent },
       { path: 'speakers/:projectId', component: SpeakersComponent },
+      { path: 'words/:projectId', component: WordsComponent},
       { path: 'textBlockLabel/:projectId/:chapterId', component: TextBlockLabelComponent },
       // { path: 'view-users', component: ViewUsersComponent },
       // { path: 'profile/:userId', component: ProfileComponent },

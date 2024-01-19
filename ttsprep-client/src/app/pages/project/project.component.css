@@ -1,0 +1,8 @@
+.project-nav-item  {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: inherit;
+  color: inherit;
+  border-bottom: 0.2em
+  solid black; border-radius: 0;
+}

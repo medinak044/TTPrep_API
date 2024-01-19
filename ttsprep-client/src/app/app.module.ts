@@ -20,6 +20,8 @@ import { SpeakersComponent } from './pages/speakers/speakers.component';
 import { SpeakerFormModalComponent } from './components/speaker-form-modal/speaker-form-modal.component';
 import { TextBlockLabelComponent } from './pages/text-block-label/text-block-label.component';
 import { TextblocklabelFormModalComponent } from './components/textblocklabel-form-modal/textblocklabel-form-modal.component';
+import { WordsComponent } from './pages/words/words.component';
+import { WordFormModalComponent } from './components/word-form-modal/word-form-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { TextblocklabelFormModalComponent } from './components/textblocklabel-fo
     SpeakersComponent,
     SpeakerFormModalComponent,
     TextBlockLabelComponent,
-    TextblocklabelFormModalComponent
+    TextblocklabelFormModalComponent,
+    WordsComponent,
+    WordFormModalComponent
   ],
   imports: [
     BrowserModule,

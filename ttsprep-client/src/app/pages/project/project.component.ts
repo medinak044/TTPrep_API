@@ -50,8 +50,6 @@ export class ProjectComponent implements OnInit {
     // Getting the project also gets its associated navigation properties
     this.projectIdParam = this.activatedRoute.snapshot.paramMap.get('projectId') as string
     this.getProjectById() // Get project data from db
-
-    // this.initiateForm()  // If project data was passed on to this component, fill out form
   }
 
   setCurrentChapter(chapter?: Chapter) {
@@ -61,8 +59,6 @@ export class ProjectComponent implements OnInit {
 
   // Must set up Bootstrap modal data properly on click
   setupChapterModal(crudMethodMode: CrudMethodsEnum, chapter?: Chapter) {
-    // this.setCurrentChapter(chapter)
-
     // Set up the child component
     this.chapterFormModalComponent.inputChapter = chapter
     this.chapterFormModalComponent.crudMethodMode = crudMethodMode
@@ -116,7 +112,6 @@ export class ProjectComponent implements OnInit {
               this.setCurrentChapter(this.currentProject.chapters[0])
             }
           })
-
       },
       error: (err) => { console.log(err) }
     })
@@ -171,12 +166,6 @@ export class ProjectComponent implements OnInit {
         textBlock.textBlockLabel = chapter.textBlockLabels.find((t: TextBlockLabel) => t.id == textBlock.textBlockLabelId)
       }
     })
-  }
-
-
-  // When user clicks on a speaker dropdown
-  populateSpeakerList() {
-
   }
 
 

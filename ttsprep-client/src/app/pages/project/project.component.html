@@ -17,8 +17,11 @@
               {{currentProject.title}}
               <i class="bi bi-pencil-fill ms-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#projectFormModal"></i>
             </h1>
-            <a class="clickable-fade me-2" style="text-decoration: inherit; color: inherit;" routerLink="/speakers/{{currentProject.id}}">
+            <a class="project-nav-item clickable-fade ms-5" routerLink="/speakers/{{currentProject.id}}">
               Speakers
+            </a>
+            <a class="project-nav-item clickable-fade ms-5" routerLink="/words/{{currentProject.id}}">
+              Words
             </a>
 
           </div>
