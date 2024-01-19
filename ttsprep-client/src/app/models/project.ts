@@ -12,4 +12,5 @@ export interface Project {
     chapters?: Chapter[]
     words?: Word[]
     speakers?: Speaker[]
+    currentChapterId?: string
 }

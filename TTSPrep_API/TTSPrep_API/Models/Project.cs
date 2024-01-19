@@ -17,5 +17,5 @@ public class Project
     public ICollection<Chapter>? Chapters { get; set; }
     public ICollection<Word>? Words { get; set; }
     public ICollection<Speaker>? Speakers { get; set; }
-    //public string? CurrentChapterId { get; set; } // Implied foreign key
+    public string? CurrentChapterId { get; set; } // Implied foreign key
 }

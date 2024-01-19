@@ -84,7 +84,6 @@ public class TextBlockController : ControllerBase
         var textBlock = new TextBlock
         {
             Id = Guid.NewGuid().ToString(),
-            Label = textBlockForm.Label,
             OrderNumber = orderNumber,
             OriginalText = textBlockForm.OriginalText,
             ModifiedText = textBlockForm.ModifiedText.IsNullOrEmpty() ? textBlockForm.OriginalText : textBlockForm.ModifiedText,
@@ -123,7 +122,6 @@ public class TextBlockController : ControllerBase
         }
 
         #region Overwrite values
-        textBlock.Label = textBlockForm.Label;
         textBlock.OriginalText = textBlockForm.OriginalText;
 
         // Original text is not null, modified text is null
