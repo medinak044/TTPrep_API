@@ -38,11 +38,11 @@ export class WordFormModalComponent implements OnInit {
   initiateForm() {
     // Create
     if (this.crudMethodMode == this.crudMethodModeEnum.CREATE) {
-      this.formGroup = this.fb.group({
-        id: [''],
-        originalSpelling: [''],
-        modifiedSpelling: [''],
-        projectId: ['']
+      this.formGroup.patchValue({
+        id: '',
+        originalSpelling: '',
+        modifiedSpelling: '',
+        projectId: ''
       })
     }
 
@@ -57,11 +57,11 @@ export class WordFormModalComponent implements OnInit {
         projectId,
       } = this.word
 
-      this.formGroup = this.fb.group({
-        id: [id],
-        originalSpelling: [originalSpelling],
-        modifiedSpelling: [modifiedSpelling],
-        projectId: [projectId]
+      this.formGroup.patchValue({
+        id: id,
+        originalSpelling: originalSpelling,
+        modifiedSpelling: modifiedSpelling,
+        projectId: projectId
       })
     }
   }
