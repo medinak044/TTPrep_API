@@ -17,6 +17,9 @@ import {TextblockFormModalComponent} from "../../components/textblock-block/text
 import {TextBlock} from "../../models/textBlock";
 import {Speaker} from "../../models/speaker";
 import {TextBlockLabel} from "../../models/textBlockLabel";
+import {Word} from "../../models/word";
+import {TextBlockService} from "../../services/text-block.service";
+import {TextReplace} from "../../shared/text-replace";
 
 @Component({
   selector: 'app-project',
@@ -26,6 +29,7 @@ import {TextBlockLabel} from "../../models/textBlockLabel";
 export class ProjectComponent implements OnInit {
   loggedInUser!: LoginResDto
   projectIdParam!: string
+  textReplaceFeature: TextReplace = new TextReplace()
 
   currentProject!: Project
   // chapters?: Chapter[] = []
@@ -36,12 +40,14 @@ export class ProjectComponent implements OnInit {
   @ViewChild(ChapterFormModalComponent) chapterFormModalComponent!: ChapterFormModalComponent
   @ViewChild(TextblockFormModalComponent) textblockBlockComponent!: TextblockFormModalComponent
 
-  copyMessageTextBlockId?: string
+  textBlockAlertMessageId?: string
+  textBlockAlertMessage?: string
 
   constructor(
     public appUserService: AppUserService,
     public projectService: ProjectService,
     public chapterService: ChapterService,
+    private textBlockService: TextBlockService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) { }
@@ -168,20 +174,65 @@ export class ProjectComponent implements OnInit {
     })
   }
 
+  fireTextBlockAlertMessage(textBlockId: string, message: string) {
+    this.textBlockAlertMessageId = textBlockId
+    this.textBlockAlertMessage = message
+
+    // Clear message
+    setTimeout(() => {
+      this.textBlockAlertMessageId = ""
+      this.textBlockAlertMessage = ""
+    }, 3000);
+  }
 
   copyTextToClipBoard(textBlockId: string, bodyText?: string, speakerName?: string) {
     if (!speakerName) {
-      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`);
+      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`)
       console.log(`${bodyText}`)
     } else {
-      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`);
+      navigator.clipboard.writeText(`${speakerName}: ${bodyText}`)
       console.log(`${speakerName}: ${bodyText}`)
     }
 
-    this.copyMessageTextBlockId = textBlockId
-
-    setTimeout(() => {
-      this.copyMessageTextBlockId = ""
-    }, 3000);
+    this.fireTextBlockAlertMessage(textBlockId,"Text copied!")
   }
+
+  copyChapterTextToClipBoard(chapter: Chapter) {
+    // Include chapter name, speaker and body text
+    let chapterText: string =  ''
+    chapterText +=`${chapter.title}\n`
+
+    chapter.textBlocks?.forEach((textBlock: TextBlock) => {
+      chapterText += `\n${textBlock.speaker?.name ?? "(Speaker)"}:\n`
+      chapterText += `${textBlock.modifiedText ?? (textBlock.originalText || "(Text)")}\n`
+    })
+
+    navigator.clipboard.writeText(chapterText)
+    console.log(chapterText)
+    this.fireTextBlockAlertMessage('',"Chapter text copied!")
+  }
+
+  // For buttons outside of forms
+  textReplaceAndSave(textBlockId: string, textBlock: TextBlock, words?: Word[]) {
+    // Check if any Words are available to aid in text replacement
+    if (words?.length == 0) {
+      this.fireTextBlockAlertMessage(textBlockId, "Must add a word first before replacing text!")
+      return
+    }
+
+    let newTextBlock: TextBlock = this.textReplaceFeature.textReplace(textBlock, words)
+    this.fireTextBlockAlertMessage(textBlockId, "Text modified!")
+
+    // Save changes
+    if (newTextBlock) {
+      this.textBlockService.updateTextBlock(newTextBlock).subscribe({
+        next: (res: TextBlock) => {
+          this.getProjectById() // Update visual display
+        },
+        error: (err) => { console.log(err) }
+      })
+    }
+  }
+
+
 }

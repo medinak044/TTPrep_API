@@ -10,7 +10,7 @@
       </div>
       <form [formGroup]="formGroup" (submit)="onSubmit()" autocomplete="off">
         <div class="modal-body">
-          <div class="form-row form-group">
+          <div *ngIf="crudMethodMode !== crudMethodModeEnum.DELETE"  class="form-row form-group">
             <div class="col">
               <label style="font-size: 75%; opacity: 0.75;">Text Block Label</label>
               <select formControlName="textBlockLabelId" class="form-select mb-3">
@@ -40,11 +40,17 @@
                         style="min-height: 25em;"
                         placeholder="Modified Text"></textarea>
             </div>
+
+            <div class="btn btn-s clickable-fade" style="display: flex; justify-content: center"
+                 (click)="textReplaceModifiedText()">
+              <i class="bi bi-magic me-2"></i>Apply text replacement
+            </div>
+
+            <input type="hidden" formControlName="id" />
+            <input type="hidden" formControlName="orderNumber" />
+            <input type="hidden" formControlName="chapterId" />
           </div>
 
-          <input type="hidden" formControlName="id" />
-          <input type="hidden" formControlName="orderNumber" />
-          <input type="hidden" formControlName="chapterId" />
 
           <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">
             <p>Are you sure you want to remove this text block?</p>
@@ -52,7 +58,7 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="discardChanges()">Cancel</button>
           <button *ngIf="crudMethodMode == crudMethodModeEnum.CREATE" [disabled]="formGroup.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
           <button *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE" [disabled]="formGroup.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
           <button *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" [disabled]="formGroup.invalid" class="btn btn-danger" data-bs-dismiss="modal">Remove</button>

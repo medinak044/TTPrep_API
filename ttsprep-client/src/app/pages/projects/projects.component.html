@@ -24,6 +24,7 @@
     <table class="table table-striped container">
       <thead>
       <th>Title</th>
+      <th>Description</th> <!-- Cut off text if too long -->
       <th>Created</th>
       <th></th> <!-- Project option buttons -->
       </thead>
@@ -31,6 +32,7 @@
       <tbody>
         <tr *ngFor="let project of projectsFiltered">
           <td>{{ project.title }}</td>
+          <td>{{ project.description }}</td>
           <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
           <td>
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">

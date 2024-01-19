@@ -32,7 +32,8 @@
 
               <div *ngIf="currentChapter" style="display: flex; flex-direction: column;">
                 <div style="display: flex; flex-direction: row;">
-                  <h5 class="card-body text-center">{{currentChapter.title}}
+                  <h5 class="card-body text-center clickable-fade" (click)="copyChapterTextToClipBoard(currentChapter)">
+                    {{currentChapter.title}}
                     <i class="bi bi-x-lg me-2 mt-1 clickable-fade" style="float: right;"
                        (click)="setCurrentChapter(undefined)"></i></h5>
                 </div>
@@ -70,7 +71,16 @@
                            (click)="setUpTextBlockModal(crudMethodModeEnum.UPDATE, textBlock)">
                           <i class="bi bi-pencil-square me-2"></i>Edit
                         </a>
-                        <span *ngIf="copyMessageTextBlockId == textBlock.id" style="font-size: 75%; opacity: 0.75; color: salmon"> Text copied! </span>
+                        <div *ngIf="currentProject.words!.length == 0" class="btn btn-s clickable-fade" routerLink="/words/{{currentProject.id}}">
+                          <i class="bi bi-star me-2"></i>Add a word here!
+                        </div>
+                        <div *ngIf="currentProject.words!.length > 0" class="btn btn-s clickable-fade" (click)="textReplaceAndSave(textBlock.id, textBlock, currentProject.words)">
+                          <i class="bi bi-magic me-2"></i>Apply text replacement
+                        </div>
+                        <div class="btn btn-s">
+                          <span *ngIf="(textBlock.id == textBlockAlertMessageId) && textBlockAlertMessage" style="font-size: 75%; opacity: 0.75; color: salmon">{{textBlockAlertMessage}}</span>
+                        </div>
+
                       </div>
                     </div>
                   </div>

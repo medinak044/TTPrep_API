@@ -9,8 +9,8 @@
 
   <div class="text-center">
     <h1>Text Block Labels ({{currentChapter.textBlockLabels?.length}})</h1>
-    <br>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#textBlockLabelFormModal"
+    <h5 class="text-center">{{currentChapter.title}}</h5>
+    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#textBlockLabelFormModal"
             (click)="setupTextBlockLabelModal(crudMethodModeEnum.CREATE, undefined)">
       <i class="bi bi-plus-lg me-2"></i><b>Add a label</b>
     </button>

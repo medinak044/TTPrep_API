@@ -5,6 +5,8 @@ import {TextBlock} from "../../models/textBlock";
 import {CrudMethodsEnum} from "../chapter-form-modal/chapter-form-modal.component";
 import {Chapter} from "../../models/chapter";
 import {Project} from "../../models/project";
+import {TextReplace} from "../../shared/text-replace";
+import {Word} from "../../models/word";
 
 @Component({
   selector: 'app-textblock-form-modal',
@@ -15,10 +17,12 @@ export class TextblockFormModalComponent implements OnInit {
   currentProject?: Project
   currentChapter?: Chapter // The current chapter from the parent component
   textBlock?: TextBlock
+  textReplaceFeature: TextReplace = new TextReplace()
   @Output() signalParentComponent: EventEmitter<TextBlock> = new EventEmitter<TextBlock>() // Update the specific text block
 
   crudMethodModeEnum = CrudMethodsEnum
   crudMethodMode!: CrudMethodsEnum
+  modifiedTextBackup?: string = ''
 
   formGroup: FormGroup = this.fb.group({
     id: [''],
@@ -36,6 +40,7 @@ export class TextblockFormModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.modifiedTextBackup = this.textBlock?.modifiedText
     this.initiateForm()
   }
 
@@ -126,6 +131,20 @@ export class TextblockFormModalComponent implements OnInit {
   copyOriginalTextToModifiedText() {
     this.formGroup.patchValue({
       modifiedText: this.textBlock?.originalText
+    })
+  }
+
+  textReplaceModifiedText() {
+    let newTextBlock: TextBlock = this.textReplaceFeature.textReplace(this.textBlock!, this.currentProject?.words)
+
+    this.formGroup.patchValue({
+      modifiedText: newTextBlock.modifiedText
+    })
+  }
+
+  discardChanges(){
+    this.formGroup.patchValue({
+      modifiedText: this.modifiedTextBackup
     })
   }
 
