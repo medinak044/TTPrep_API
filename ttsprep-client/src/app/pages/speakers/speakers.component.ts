@@ -11,7 +11,7 @@ import {CrudMethodsEnum} from "../../components/chapter-form-modal/chapter-form-
   templateUrl: './speakers.component.html',
   styleUrls: ['./speakers.component.css']
 })
-export class SpeakersComponent implements OnInit  {
+export class SpeakersComponent implements OnInit {
   crudMethodModeEnum: any = CrudMethodsEnum
   projectIdParam!: string
   currentProject!: Project

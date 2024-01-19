@@ -1,1 +1,55 @@
-<p>words works!</p>
+<div class="container">
+  <a class="btn btn-s mt-3 mb-3 clickable-fade"  routerLink="/project/{{projectIdParam}}">
+    <i class="bi bi-arrow-left me-2 "></i>Back to project view
+  </a>
+</div>
+
+<div *ngIf="currentProject">
+  <app-word-form-modal (signalParentComponent)="getProjectById()"></app-word-form-modal>
+
+  <div class="text-center">
+    <h1>Words ({{currentProject.words?.length}})</h1>
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#wordFormModal"
+            (click)="setupWordModal(crudMethodModeEnum.CREATE, undefined)">
+      <i class="bi bi-plus-lg me-2"></i><b>Add a word</b>
+    </button>
+
+  </div>
+
+  <div class="container">
+    <input type="text" placeholder="Search by original spelling" [(ngModel)]="filterText">
+  </div>
+
+  <div class="text-center mt-3">
+    <table class="table table-striped container">
+      <thead >
+      <th>Original</th>
+      <th>Modified</th>
+      <th>Name</th>
+      <th></th> <!-- Option buttons -->
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let word of wordsFiltered">
+        <td>{{ word.originalSpelling }}</td>
+        <td>{{ word.modifiedSpelling }}</td>
+        <td>
+          <div *ngIf="word.originalSpelling != 'Narrator'" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <button class="btn me-2" data-bs-toggle="modal" data-bs-target="#wordFormModal"
+                    (click)="setupWordModal(crudMethodModeEnum.DELETE, word)">
+              <i class="bi bi-x-lg me-2"></i>Remove
+            </button>
+
+            <button class="btn e-2" data-bs-toggle="modal" data-bs-target="#wordFormModal"
+                    (click)="setupWordModal(crudMethodModeEnum.UPDATE, word)">
+              <i class="bi bi-pencil-square me-2"></i>Edit
+            </button>
+
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
