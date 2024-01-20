@@ -10,7 +10,7 @@
       </div>
       <form [formGroup]="chapterForm" (submit)="submitChapterForm()" autocomplete="off">
         <div class="modal-body">
-          <div *ngIf="crudMethodMode !== crudMethodModeEnum.DELETE" class="form-row form-group">
+          <div  class="form-row form-group">
             <div class="col">
               <input formControlName="title" class="form-control form-control mb-3" placeholder="Title" />
             </div>

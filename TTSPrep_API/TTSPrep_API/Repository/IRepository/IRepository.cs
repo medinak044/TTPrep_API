@@ -12,4 +12,5 @@ public interface IRepository<T> where T : class
     Task<bool> RemoveAsync(T entity);
     Task<bool> RemoveRangeAsync(IEnumerable<T> entity);
     Task<bool> UpdateAsync(T entity);
+    bool UpdateRange(IEnumerable<T> entities);
 }

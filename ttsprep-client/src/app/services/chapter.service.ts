@@ -36,6 +36,11 @@ export class ChapterService {
     (`${environment.apiUrl}/${this.chapterControllerUrl}/UpdateChapter`, chapterForm)
   }
 
+  updateChapterOrderNumber(chapterForm: Chapter): Observable<Chapter> {
+    return this.http.put<Chapter>
+    (`${environment.apiUrl}/${this.chapterControllerUrl}/UpdateChapterOrderNumber`, chapterForm)
+  }
+
   removeChapter(chapterId: string): Observable<Chapter> {
     return this.http.delete<Chapter>
     (`${environment.apiUrl}/${this.chapterControllerUrl}/RemoveChapter/${chapterId}`)

@@ -59,4 +59,15 @@ public class Repository<T> : IRepository<T> where T : class
         _context.Update(entity);
         return true; // Remember to call Save() after this
     }
+
+    public virtual bool UpdateRange(IEnumerable<T> entities)
+    {
+        //_context.AttachRange(entities); // In case other entities were previously attached within the same method call
+        //foreach (var entity in entities)
+        //{ _context.Entry(entity).State = EntityState.Modified; }
+
+
+        _context.UpdateRange(entities);
+        return true;
+    }
 }

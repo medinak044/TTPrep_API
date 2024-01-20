@@ -101,14 +101,25 @@ export class ChapterFormModalComponent implements OnInit{
   }
 
   // TODO: Make sure api changes ALL the affected order numbers (if 3 was deleted, change only > 3)
-  removeChapter(chapterId: string) {
-    if (chapterId.length > 0) {
-      this.chapterService.removeChapter(chapterId).subscribe({
+  updateChapterOrderNumber(chapter: Chapter) {
+    if (chapter) {
+      this.chapterService.updateChapterOrderNumber(chapter).subscribe({
         next: (res: Chapter) => {
-          this.signalParentComponent.emit(res)
+          this.removeChapter(res.id) // Then delete chapter
         },
         error: (err) => { console.log(err) }
       })
+    }
+  }
+
+  removeChapter(chapterId: string) {
+      if (chapterId) {
+        this.chapterService.removeChapter(chapterId).subscribe({
+          next: (res: Chapter) => {
+            this.signalParentComponent.emit(res)
+          },
+          error: (err) => { console.log(err) }
+        })
     }
   }
 

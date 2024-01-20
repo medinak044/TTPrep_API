@@ -121,12 +121,39 @@ public class ChapterController : ControllerBase
         return Ok(chapter);
     }
 
-    //[HttpPut("UpdateChapterOrderNumber")]
-    //public async Task<ActionResult> UpdateChapterOrderNumber([FromBody] Chapter chapterForm)
-    //{
-    //Increment all the order numbers of items by 1 to make space for the submitted items
-    //Ex: Insert item between 1 and 2. Increment items 2 and up by 1.
-    //}
+    // Call this method first from client before deleting a chapter
+    [HttpPut("UpdateChapterOrderNumber")]
+    public async Task<ActionResult> UpdateChapterOrderNumber([FromBody] Chapter chapterForm)
+    {
+        #region Update order numbers of chapters
+        // Get all the chapters within the same project as the deleted chapter
+        var filteredChapters = _unitOfWork.Chapters.GetSome(c => 
+        (c.OrderNumber > chapterForm.OrderNumber) && (c.Id == chapterForm.ProjectId));
+        // Filter the collection to only have chapters with order numbers greater than deleted chapter
+        foreach (var c in filteredChapters)
+        {
+            c.OrderNumber -= 1; // Decrease order number to fill the space opened by the deleted chapter
+            c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+        }
+
+        //foreach (var c in filteredChapters)
+        //{
+        //    await _unitOfWork.Chapters.UpdateAsync(c);
+        //}
+
+        _unitOfWork.Chapters.UpdateRange(filteredChapters);
+        if (!await _unitOfWork.SaveAsync())
+        {
+            return BadRequest(new AuthResult()
+            {
+                Success = false,
+                Messages = new List<string>() { "Something went wrong while saving" }
+            });
+        }
+        #endregion
+
+        return Ok(chapterForm);
+    }
 
 
     [HttpPut("UpdateChapter")]
@@ -165,9 +192,9 @@ public class ChapterController : ControllerBase
     [HttpDelete("RemoveChapter/{chapterId}")]
     public async Task<ActionResult> RemoveChapter(string chapterId)
     {
-        var chapter = await _unitOfWork.Chapters.GetByIdAsync(chapterId);
+        var chapterToBeDeleted = await _unitOfWork.Chapters.GetByIdAsync(chapterId);
 
-        if (chapter == null)
+        if (chapterToBeDeleted == null)
         {
             return NotFound(new AuthResult()
             {
@@ -176,14 +203,7 @@ public class ChapterController : ControllerBase
             });
         }
 
-        // TODO: Change all the order numbers of chapters greater than the deleted chapter
-        // Update range()
-
-
-
-
-
-        await _unitOfWork.Chapters.RemoveAsync(chapter);
+        await _unitOfWork.Chapters.RemoveAsync(chapterToBeDeleted);
         if (!await _unitOfWork.SaveAsync())
         {
             return BadRequest(new AuthResult()
@@ -193,6 +213,7 @@ public class ChapterController : ControllerBase
             });
         }
 
-        return Ok(chapter);
+
+        return Ok(chapterToBeDeleted);
     }
 }
