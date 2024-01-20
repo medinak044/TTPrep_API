@@ -199,7 +199,7 @@ public class AccountController : ControllerBase
             UserName = registrationReqDto.UserName ?? registrationReqDto.Email,
             Email = registrationReqDto.Email,
             // Password is to be encrypted and stored via Identity Framework
-            DateCreated = DateTime.Now,
+            DateCreated = DateTime.UtcNow,
         };
 
 
@@ -471,7 +471,7 @@ public class AccountController : ControllerBase
             new Claim(ClaimTypes.NameIdentifier, user.UserName),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // For "JwtId"
-            // new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
+            // new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToUniversalTime().ToString())
             // (The role claim will be added here)
         };
 

@@ -76,7 +76,7 @@ public class ProjectController : ControllerBase
         }
 
         var newId = Guid.NewGuid().ToString();
-        var timestamp = DateTime.Now;
+        var timestamp = DateTime.UtcNow;
         
 
         // Map values

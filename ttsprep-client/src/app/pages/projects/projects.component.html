@@ -33,7 +33,7 @@
         <tr *ngFor="let project of projectsFiltered">
           <td>{{ project.title }}</td>
           <td>{{ project.description }}</td>
-          <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
+          <td>{{ project.createdDate | date: 'MMM d, y, h:mm:ss a' }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
           <td>
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">

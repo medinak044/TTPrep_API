@@ -10,7 +10,7 @@ public class RefreshToken
     public string JwtId { get; set; }
     public bool IsUsed { get; set; }
     public bool IsRevoked { get; set; }
-    public DateTime AddedDate { get; set; } /*= DateTime.Now;*/
+    public DateTime AddedDate { get; set; } //= DateTime.UtcNow;
     public DateTime ExpiryDate { get; set; }
     [ForeignKey(nameof(AppUser))]
     public string? AppUserId { get; set; }

@@ -9,7 +9,7 @@ public class Project
     public string Id { get; set; }
     public string? Title { get; set; } // Default to "project_123" (based on project id)
     public string? Description { get; set; }
-    public DateTime? CreatedDate { get; set; } // = DateTime.Now;
+    public DateTime? CreatedDate { get; set; } // = DateTime.UtcNow;
     public DateTime LastModifiedDate { get; set; }
     [ForeignKey(nameof(AppUser))]
     public string? OwnerId { get; set; }

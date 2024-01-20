@@ -13,6 +13,7 @@ public class TextBlock
     public string? ModifiedText { get; set; }
     [ForeignKey(nameof(Chapter))]
     public string ChapterId { get; set; }
+    // Future reference: building bridge tables for Speaker and TextBlockLabel https://www.udemy.com/course/build-an-app-with-aspnet-core-and-angular-from-scratch/learn/lecture/22401476#questions
     public string? SpeakerId { get; set; } // Implied foreign key
     [NotMapped]
     public Speaker? Speaker { get; set; }

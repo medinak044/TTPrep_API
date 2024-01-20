@@ -51,7 +51,7 @@ public class DbInitializer: IDbInitializer
             {
                 UserName = "admin@example.com",
                 Email = "admin@example.com",
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
             await _userManager.CreateAsync(adminUser, demoIdentityPassword);
             // After user is created, add role
@@ -66,7 +66,7 @@ public class DbInitializer: IDbInitializer
             {
                 UserName = "appuser@example.com",
                 Email = "appuser@example.com",
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow,
             };
             await _userManager.CreateAsync(appUser, demoIdentityPassword);
             // After user is created, add role
