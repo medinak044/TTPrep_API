@@ -36,7 +36,7 @@
           <td>{{ project.createdDate }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
           <td>
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button class="btn btn-s btn-danger me-2" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
+              <button class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
                 <i class="bi bi-x-lg me-2"></i>Remove
               </button>
               <!--  Delete confirmation modal -->
@@ -58,7 +58,7 @@
                 </div>
               </div>
 
-              <a class="btn btn-s btn-primary me-2" routerLink="/project/{{project.id}}">
+              <a class="btn btn-s me-2 clickable-fade" routerLink="/project/{{project.id}}">
                 <i class="bi bi-arrow-right me-2"></i>Open
               </a>
 
