@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 .clickable-fade:hover {
-  opacity: 75%;
+  opacity: 50%;
   cursor: pointer;
+}
+
+body {
+  background: white;
+  background-image: radial-gradient(#f3f3f3 2px, transparent 0);
+  background-size: 40px 40px;
+  background-position: -19px -19px;
 }
