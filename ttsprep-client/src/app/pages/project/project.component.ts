@@ -20,6 +20,7 @@ import {TextBlockLabel} from "../../models/textBlockLabel";
 import {Word} from "../../models/word";
 import {TextBlockService} from "../../services/text-block.service";
 import {TextReplace} from "../../shared/text-replace";
+import {ProjectFormModalComponent} from "../../components/project-form-modal/project-form-modal.component";
 
 @Component({
   selector: 'app-project',
@@ -37,6 +38,7 @@ export class ProjectComponent implements OnInit {
   currentChapter?: Chapter
   crudMethodModeEnum: any = CrudMethodsEnum // Used to define what the form components will do
   // crudMethodMode!: CrudMethodsEnum
+  @ViewChild(ProjectFormModalComponent) projectFormModalComponent!: ProjectFormModalComponent
   @ViewChild(ChapterFormModalComponent) chapterFormModalComponent!: ChapterFormModalComponent
   @ViewChild(TextblockFormModalComponent) textblockBlockComponent!: TextblockFormModalComponent
 
@@ -56,6 +58,13 @@ export class ProjectComponent implements OnInit {
     // Getting the project also gets its associated navigation properties
     this.projectIdParam = this.activatedRoute.snapshot.paramMap.get('projectId') as string
     this.getProjectById() // Get project data from db
+  }
+
+  setupProjectModal(crudMethodMode: CrudMethodsEnum, project?: Project) {
+    // Set up the child component
+    this.projectFormModalComponent.inputProject = project
+    this.projectFormModalComponent.crudMethodMode = crudMethodMode
+    this.projectFormModalComponent.initiateForm()
   }
 
   setCurrentChapter(chapter?: Chapter) {

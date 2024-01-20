@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {LoginResDto} from "../../models/loginResDto";
 import {ProjectReqDto} from "../../models/projectReqDto";
 import {Project} from "../../models/project";
+import {CrudMethodsEnum} from "../chapter-form-modal/chapter-form-modal.component";
+import {ProjectService} from "../../services/project.service";
 
 @Component({
   selector: 'app-project-form-modal',
@@ -10,10 +12,12 @@ import {Project} from "../../models/project";
   styleUrls: ['./project-form-modal.component.css']
 })
 export class ProjectFormModalComponent implements OnInit {
+  inputProject?: Project  // Set by parent component
   @Input() loggedInUser!: LoginResDto
-  @Input() inputProject?: Project
-  @Output() sentProjectForm = new EventEmitter<ProjectReqDto>() // Emit the project form details to the parent component
+  @Output() signalParentComponent: EventEmitter<Project> = new EventEmitter<Project>() // Emit the project form details to the parent component
 
+  crudMethodModeEnum: any = CrudMethodsEnum
+  crudMethodMode!: CrudMethodsEnum
 
   projectForm: FormGroup = this.fb.group({
     id: [''],
@@ -22,7 +26,10 @@ export class ProjectFormModalComponent implements OnInit {
     ownerId: ['']
   })
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    public projectService: ProjectService,
+    private fb: FormBuilder
+  ) { }
   ngOnInit(): void {
     this.initiateForm()  // If project data was passed on to this component, fill out form
   }
@@ -49,15 +56,41 @@ export class ProjectFormModalComponent implements OnInit {
   submitProjectForm() {
     let projectReqDto: ProjectReqDto = this.projectForm.value // Map to DTO
     projectReqDto.ownerId = this.loggedInUser.id // Include owner id
-    if (!this.inputProject) { this.createProject(projectReqDto)}
-    else if (this.inputProject) {this.updateProject(projectReqDto)}
+    if (this.crudMethodMode == this.crudMethodModeEnum.CREATE) { this.createProject(projectReqDto)}
+    else if (this.crudMethodMode == this.crudMethodModeEnum.UPDATE) {this.updateProject(projectReqDto)}
+    else if (this.crudMethodMode == this.crudMethodModeEnum.DELETE) {this.removeProject(projectReqDto)}
   }
 
   createProject(projectReqDto: ProjectReqDto) {
-    this.sentProjectForm.emit(projectReqDto)
+    this.projectService.createProject(projectReqDto).subscribe({
+      next: (res: Project) => {
+        this.signalParentComponent.emit(res) // Update visual display
+      },
+      error: (err) => { console.log(err) }
+    })
   }
 
   updateProject(projectReqDto: ProjectReqDto) {
-    this.sentProjectForm.emit(projectReqDto)
+    if (projectReqDto) {
+      this.projectService.updateProject(projectReqDto).subscribe({
+        next: (res: Project) => {
+          this.signalParentComponent.emit(res) // Update visual display
+        },
+        error: (err) => { console.log(err) }
+      })
+    }
   }
+
+  removeProject(projectReqDto: ProjectReqDto) {
+    if (projectReqDto.id!.length > 0) {
+      this.projectService.removeProject(projectReqDto.id!).subscribe({
+        next: (res: Project) => {
+          this.signalParentComponent.emit(res) // Update visual display
+        },
+        error: (err) => { console.log(err) }
+      })
+    }
+  }
+
+
 }

@@ -1,11 +1,12 @@
 <div *ngIf="!currentProject">
-  <app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="createProject($event)"></app-project-form-modal>
+  <app-project-form-modal [loggedInUser]="loggedInUser" (signalParentComponent)="getUserProjects()"></app-project-form-modal>
 
   <div class="text-center">
     <h1>Projects ({{projects?.length}})</h1>
     <br>
     <!--(Modal activate button)-->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectFormModal">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#projectFormModal"
+            (click)="setupProjectModal(crudMethodModeEnum.CREATE, undefined)">
       <i class="bi bi-plus-lg me-2"></i><b>Create new project</b>
     </button>
 
@@ -36,28 +37,10 @@
           <td>{{ project.createdDate | date: 'MMM d, y, h:mm:ss a' }}</td> <!--(Date yyyy/MM/dd, hh/mm/ss Military time)-->
           <td>
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
+              <button class="btn btn-s me-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#projectFormModal"
+                      (click)="setupProjectModal(crudMethodModeEnum.DELETE, project)">
                 <i class="bi bi-x-lg me-2"></i>Remove
               </button>
-              <!--  Delete confirmation modal -->
-              <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5">Remove Project</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Are you sure you want to remove the project "{{project.title}}"?</p>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                      <button class="btn btn-danger" data-bs-dismiss="modal" (click)="removeProject(project.id)">Remove Project</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <a class="btn btn-s me-2 clickable-fade" routerLink="/project/{{project.id}}">
                 <i class="bi bi-arrow-right me-2"></i>Open
               </a>

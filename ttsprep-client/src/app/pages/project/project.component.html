@@ -1,5 +1,5 @@
 <div *ngIf="currentProject" class="mt-4">
-  <app-project-form-modal [loggedInUser]="loggedInUser" [inputProject]="currentProject" (sentProjectForm)="editProject($event)"></app-project-form-modal>
+  <app-project-form-modal [loggedInUser]="loggedInUser" (signalParentComponent)="getProjectById()"></app-project-form-modal>
 
   <app-chapter-form-modal
     [projectId]="currentProject.id"
@@ -15,7 +15,8 @@
             <h1 class="h2 mb-2">
               <i class="bi bi-arrow-left me-2 clickable-fade" routerLink="/projects"></i>
               {{currentProject.title}}
-              <i class="bi bi-pencil-fill ms-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#projectFormModal"></i>
+              <i class="bi bi-pencil-fill ms-2 clickable-fade" data-bs-toggle="modal" data-bs-target="#projectFormModal"
+                 (click)="setupProjectModal(crudMethodModeEnum.UPDATE, currentProject)"></i>
             </h1>
             <a class="project-nav-item clickable-fade ms-5" routerLink="/speakers/{{currentProject.id}}">
               Speakers

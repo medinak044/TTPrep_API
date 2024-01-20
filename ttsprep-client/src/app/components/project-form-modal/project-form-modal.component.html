@@ -3,14 +3,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" *ngIf="!inputProject">Create a project</h1>
-        <h1 class="modal-title fs-5" *ngIf="inputProject">Edit project</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.CREATE">Create a project</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE">Edit project</h1>
+        <h1 class="modal-title fs-5" *ngIf="crudMethodMode == crudMethodModeEnum.DELETE">Remove project</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="projectForm" (submit)="submitProjectForm()" autocomplete="off">
         <div class="modal-body">
-          <input type="hidden" formControlName="id" />
-          <div class="form-row form-group">
+          <div *ngIf="crudMethodMode !== crudMethodModeEnum.DELETE" class="form-row form-group">
             <div class="col">
               <input formControlName="title" class="form-control form-control mb-3" placeholder="Title" />
             </div>
@@ -19,14 +19,21 @@
                 <input formControlName="description" class="form-control form-control mb-3" placeholder="Description" />
               </div>
             </div>
+            <input type="hidden" formControlName="id" />
+            <input type="hidden" formControlName="ownerId" />
           </div>
-          <input type="hidden" formControlName="ownerId" />
+
+          <div *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" class="modal-body">
+            <p>Are you sure you want to remove the project "{{inputProject?.title}}"?</p>
+          </div>
         </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button *ngIf="!inputProject" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
-        <button *ngIf="inputProject" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
-      </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.CREATE" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Create</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.UPDATE" [disabled]="projectForm.invalid" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+          <button *ngIf="crudMethodMode == crudMethodModeEnum.DELETE" [disabled]="projectForm.invalid" class="btn btn-danger" data-bs-dismiss="modal">Remove Project</button>
+        </div>
       </form>
     </div>
   </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { LoginResDto } from 'src/app/models/loginResDto';
 import { Project } from 'src/app/models/project';
 import { AppUserService } from 'src/app/services/app-user.service';
 import {ProjectService} from "../../services/project.service";
 import {Observable} from "rxjs";
 import {ProjectReqDto} from "../../models/projectReqDto";
+import {CrudMethodsEnum} from "../../components/chapter-form-modal/chapter-form-modal.component";
+import {ProjectFormModalComponent} from "../../components/project-form-modal/project-form-modal.component";
 
 @Component({
   selector: 'app-projects',
@@ -12,6 +14,7 @@ import {ProjectReqDto} from "../../models/projectReqDto";
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
+  crudMethodModeEnum: any = CrudMethodsEnum
   loggedInUser!: LoginResDto
   projects?: Project[] = []
   projects$?: Observable<Project[]>
@@ -20,6 +23,8 @@ export class ProjectsComponent implements OnInit {
   projectsFiltered?: Project[] = []
   _filterText: string = ""
   isCreatingNewProject: boolean = false // Switch display over to event form
+
+  @ViewChild(ProjectFormModalComponent) projectFormModalComponent!: ProjectFormModalComponent
 
   get filterText(): string {
     return this._filterText
@@ -41,6 +46,14 @@ export class ProjectsComponent implements OnInit {
 
   switchFormState(isFormActive: boolean) {
     this.isCreatingNewProject = isFormActive
+  }
+
+  // Must set up Bootstrap modal data properly on click
+  setupProjectModal(crudMethodMode: CrudMethodsEnum, project?: Project) {
+    // Set up the child component
+    this.projectFormModalComponent.inputProject = project
+    this.projectFormModalComponent.crudMethodMode = crudMethodMode
+    this.projectFormModalComponent.initiateForm()
   }
 
   createProject(projectReqDto: ProjectReqDto) {
@@ -84,9 +97,9 @@ export class ProjectsComponent implements OnInit {
     }
   }
 
-  removeProject(projectId: string) {
-    if (projectId.length > 0) {
-      this.projectService.removeProject(projectId).subscribe({
+  removeProject(projectReqDto: ProjectReqDto) {
+    if (projectReqDto.id!.length > 0) {
+      this.projectService.removeProject(projectReqDto.id!).subscribe({
         next: (res: any) => {
           this.getUserProjects() // Update visual display
         },
