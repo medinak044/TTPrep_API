@@ -68,8 +68,24 @@ export class ProjectComponent implements OnInit {
   }
 
   setCurrentChapter(chapter?: Chapter) {
-    this.currentChapter = chapter
-    this.prepareTextBlocks(this.currentChapter) // Sort the current chapter's text blocks and assign their respective speaker and label
+    this.currentProject.currentChapterId = chapter?.id ?? ''
+    // Map to DTO
+    let projectReqDto: ProjectReqDto = {
+      id: this.currentProject.id,
+      title: this.currentProject.title,
+      description: this.currentProject.description,
+      ownerId: this.currentProject.ownerId!,
+      currentChapterId: this.currentProject.currentChapterId ?? ''
+    }
+
+    // Save the current chapter id
+    this.projectService.updateProject((projectReqDto)).subscribe({
+      next: (res: Project) => {
+        this.currentChapter = chapter
+        this.prepareTextBlocks(this.currentChapter) // Sort the current chapter's text blocks and assign their respective speaker and label
+      },
+      error: (err) => { console.log(err) }
+    })
   }
 
   // Must set up Bootstrap modal data properly on click
@@ -92,13 +108,12 @@ export class ProjectComponent implements OnInit {
       return
     }
 
-    // When creating a chapter, update the current chapter if none is being displayed
-    if (!this.currentChapter && this.chapterFormModalComponent.crudMethodMode == this.crudMethodModeEnum.CREATE) {
-      this.currentChapter = chapter
-    }
+    // When creating a chapter, update the current chapter if is the only chapter in project
+    if (this.currentProject.chapters?.length == 1 && this.chapterFormModalComponent.crudMethodMode == this.crudMethodModeEnum.CREATE)
+      { this.setCurrentChapter(chapter) }
 
-      // Only update the current chapter data if user edited the same chapter
-    if (this.currentChapter?.id == chapter.id)
+    // Update the current chapter data if the edited chapter is not the same as the currently opened chapter
+    if (this.currentChapter?.id !== chapter.id)
       { this.setCurrentChapter(chapter) }
 
     this.currentProject.chapters?.push(chapter) // Attach chapter
@@ -123,8 +138,8 @@ export class ProjectComponent implements OnInit {
           // Assign the first chapter in the sorted list as the current chapter by default
           .then(() => {
             if (this.currentProject.chapters) {
-              // this.currentChapter = this.currentProject.chapters ? this.currentProject.chapters[0] : undefined
-              this.setCurrentChapter(this.currentProject.chapters[0])
+              this.setCurrentChapter(this.currentProject.chapters
+                .find(c => c.id == this.currentProject.currentChapterId))
             }
           })
       },
@@ -132,7 +147,7 @@ export class ProjectComponent implements OnInit {
     })
   }
 
-  editProject(projectReqDto: ProjectReqDto) {
+  updateProject(projectReqDto: ProjectReqDto) {
     if (projectReqDto) {
       this.projectService.updateProject(projectReqDto).subscribe({
         next: (res: Project) => {

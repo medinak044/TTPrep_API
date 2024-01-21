@@ -3,4 +3,5 @@ export interface ProjectReqDto {
   title?: string
   description?: string
   ownerId: string
+  currentChapterId?: string
 }
