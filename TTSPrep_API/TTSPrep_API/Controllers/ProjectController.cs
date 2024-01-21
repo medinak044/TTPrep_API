@@ -147,6 +147,7 @@ public class ProjectController : ControllerBase
         // Overwrite values
         project.Title = projectReqDto.Title.IsNullOrEmpty() ? $"project-{project.Id}" : projectReqDto.Title; // Make sure project title has a value
         project.Description = projectReqDto.Description;
+        project.CurrentChapterId = projectReqDto.CurrentChapterId;
 
         await _unitOfWork.Projects.UpdateAsync(project);
         if (!await _unitOfWork.SaveAsync())

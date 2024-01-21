@@ -1,7 +1,6 @@
 export const environment = {
     production: true,
-    // apiUrl: ("https://eventusappapi.azurewebsites.net" + "/api")
-    apiUrl: ("https://.azurewebsites.net" + "/api")
+    apiUrl: ("https://ttsprepapi.azurewebsites.net" + "/api")
 };
 
 //.../client/src> ng build --configuration=production
