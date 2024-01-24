@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // If user is already logged in 
+    // If user is already logged in
     if (localStorage.getItem('user')) {
       console.log('login: User is already logged in, redirecting to home page')
       this.router.navigateByUrl('/home')
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err: any) => {
           this.loginButtonIsPressed = false // Reset the loading visual if unable to connect to api
-          this.loginErrorMessage = "Unable to connect to server."
+          this.loginErrorMessage = "Database is waking up, please submit again."
           console.log(err)
         }
       })

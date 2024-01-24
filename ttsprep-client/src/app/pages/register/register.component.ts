@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit {
       next: (res: any) => { this.router.navigateByUrl(this.previousUrl) },
       error: (err: any) => {
         this.registerButtonIsPressed = false // Reset the loading visual if unable to connect to api
-        this.registerErrorMessage = "Unable to connect to server."
+        this.registerErrorMessage = "Database is waking up, please submit again."
         this.validationErrors = err
       }
     })
