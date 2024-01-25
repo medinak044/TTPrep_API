@@ -7,7 +7,15 @@ namespace TTSPrep_API.Data;
 
 public class AppDbContext: IdentityDbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    protected readonly IConfiguration configuration;
+
+    public AppDbContext(
+        IConfiguration configuration,
+        DbContextOptions<AppDbContext> options
+        ) : base(options)
+    {
+        this.configuration = configuration;
+    }
 
     public DbSet<Chapter> Chapters { get; set; }
     public DbSet<Project> Projects { get; set; }
@@ -25,5 +33,18 @@ public class AppDbContext: IdentityDbContext
     //    //    .WithMany(p => p.Speakers)
     //    //    .OnDelete(DeleteBehavior.Cascade);
     //}
-    
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //=> optionsBuilder.UseNpgsql(
+    //    "PostgreSQL_Supabase_Connection",
+    //    options =>
+    //    {
+    //        //options.RemoteCertificateValidationCallback(MyCallback1);
+    //        //options.ProvideClientCertificatesCallback(MyCallback2);
+    //    });
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder options)
+    //{
+    //    options.UseNpgsql(configuration.GetConnectionString("PostgreSQL_Supabase_Connection"));
+    //}
 }

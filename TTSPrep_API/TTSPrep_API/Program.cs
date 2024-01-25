@@ -103,6 +103,9 @@ builder.Services.AddCors(
                 policy.WithOrigins("http://localhost:4200") // Include client app's origin
                     .AllowAnyMethod()
                     .AllowAnyHeader();
+                policy.WithOrigins("https://ttsprepclientlocalhost.azurewebsites.net")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
             });
     }
 );

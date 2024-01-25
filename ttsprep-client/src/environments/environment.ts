@@ -5,7 +5,8 @@
 export const environment = {
     production: false,
     // apiUrl: "https://localhost:44386/api" // Dev
-    apiUrl: ("https://ttsprepapi.azurewebsites.net" + "/api") // Prod 
+    apiUrl: ("https://ttsprepapi.azurewebsites.net" + "/api") // Prod
+    // apiUrl: ("https://ttsprepapilocalhost.azurewebsites.net" + "/api") // Prod (Connects to local database)
 };
 
 /*
