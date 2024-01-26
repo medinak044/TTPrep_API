@@ -7,14 +7,14 @@ namespace TTSPrep_API.Data;
 
 public class AppDbContext: IdentityDbContext
 {
-    protected readonly IConfiguration configuration;
+    //protected readonly IConfiguration configuration;
 
     public AppDbContext(
-        IConfiguration configuration,
+        //IConfiguration configuration,
         DbContextOptions<AppDbContext> options
         ) : base(options)
     {
-        this.configuration = configuration;
+        //this.configuration = configuration;
     }
 
     public DbSet<Chapter> Chapters { get; set; }

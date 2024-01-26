@@ -83,10 +83,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer_Connection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer_Connection"));
     //options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL_Connection"));
     //options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL_Supabase_Connection"));
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
