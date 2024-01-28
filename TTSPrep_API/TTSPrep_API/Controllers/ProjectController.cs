@@ -29,7 +29,7 @@ public class ProjectController : ControllerBase
     [HttpGet("GetAllProjects")]
     public async Task<ActionResult> GetAllProjects()
     {
-        var result = await _unitOfWork.Projects.GetAllAsync();
+        var result = await _unitOfWork.Projects.GetAllAsync();        
         return Ok(result);
     }
 

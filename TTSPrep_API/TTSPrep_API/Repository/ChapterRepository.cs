@@ -13,19 +13,34 @@ public class ChapterRepository: Repository<Chapter>, IChapterRepository
         _context = context;
     }
 
-    public override IEnumerable<Chapter> GetSome(Expression<Func<Chapter, bool>> predicate)
+    // PostgreSQL compatible
+    public override IEnumerable<Chapter> GetSome(Func<Chapter, bool> predicate)
     {
-        IQueryable<Chapter> chapters = _context.Chapters.Where(predicate);
+        var chapters = base.GetSome(predicate);
 
         // Include the navigation property values
         foreach (Chapter chapter in chapters)
         {
-            chapter.TextBlocks = _context.TextBlocks.Where(t => t.ChapterId == chapter.Id).ToList();
-            chapter.TextBlockLabels = _context.TextBlockLabels.Where(t => t.ChapterId != chapter.Id).ToList();
+            _context.Entry(chapter).Collection(c => c.TextBlocks).Load();
+            _context.Entry(chapter).Collection(c => c.TextBlockLabels).Load();
         }
 
         return chapters;
     }
+
+    //public override IEnumerable<Chapter> GetSome(Expression<Func<Chapter, bool>> predicate)
+    //{
+    //    IQueryable<Chapter> chapters = _context.Chapters.Where(predicate);
+
+    //    // Include the navigation property values
+    //    foreach (Chapter chapter in chapters)
+    //    {
+    //        chapter.TextBlocks = _context.TextBlocks.Where(t => t.ChapterId == chapter.Id).ToList();
+    //        chapter.TextBlockLabels = _context.TextBlockLabels.Where(t => t.ChapterId != chapter.Id).ToList();
+    //    }
+
+    //    return chapters;
+    //}
 
     public override async Task<Chapter> GetByIdAsync(string projectId)
     {

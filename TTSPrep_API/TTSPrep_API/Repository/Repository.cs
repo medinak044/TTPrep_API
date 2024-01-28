@@ -27,10 +27,17 @@ public class Repository<T> : IRepository<T> where T : class
         return await _dbSet.AnyAsync(predicate);
     }
 
-    public virtual IEnumerable<T> GetSome(Expression<Func<T, bool>> predicate)
+    // PostgreSQL compatible
+    public virtual IEnumerable<T> GetSome(Func<T, bool> predicate)
     {
-        return _dbSet.Where(predicate);
+        List<T> entities = _dbSet.ToList();
+        return entities.Where(predicate); // Filter collection using LINQ
     }
+
+    //public virtual IEnumerable<T> GetSome(Expression<Func<T, bool>> predicate)
+    //{
+    //    return _dbSet.Where(predicate);
+    //}
 
     public virtual async Task<IEnumerable<T>> GetAllAsync()
     {
