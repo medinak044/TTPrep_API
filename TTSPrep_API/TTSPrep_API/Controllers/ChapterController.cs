@@ -137,41 +137,70 @@ public class ChapterController : ControllerBase
         #region Update order numbers of chapters
         // Get all the chapters within the same project as the deleted chapter
         var allProjectChapters = _unitOfWork.Chapters.GetSome(c => c.ProjectId == chapterForm.ProjectId).ToList();
-        // Filter in chapters at or above destination order number
-        var filteredChapters = allProjectChapters.Where(c => 
-        (c.OrderNumber >= chapterForm.OrderNumber) && (c.ProjectId == chapterForm.ProjectId));
-        foreach (var c in filteredChapters)
-        {
-            c.OrderNumber += 1; // Increment order number to in response to making space for the chapter to be updated
-            c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
-        }
-        _unitOfWork.Chapters.UpdateRange(filteredChapters);
-
-        // Update the chapter's order number
         var updatedChapter = allProjectChapters.FirstOrDefault(c => c.Id == chapterForm.Id);
-        if (updatedChapter != null)
+        var filteredChapters = allProjectChapters;
+
+        // Relocating to the first chapter shifts up chapters
+        if (chapterForm.OrderNumber == 1)
         {
-            updatedChapter.OrderNumber = chapterForm.OrderNumber;
-            await _unitOfWork.Chapters.UpdateAsync(updatedChapter);
+            filteredChapters = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber < chapterForm.OrderNumber) 
+            ).ToList();
+
+            foreach (var c in filteredChapters)
+            {
+                c.OrderNumber += 1;
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+
+            _unitOfWork.Chapters.UpdateRange(filteredChapters);
         }
+        // Relocating to the last chapter shifts down chapters
+        else if (chapterForm.OrderNumber == allProjectChapters.Count)
+        {
+            filteredChapters = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber > chapterForm.OrderNumber)
+            ).ToList();
+
+            foreach (var c in filteredChapters)
+            {
+                c.OrderNumber -= 1;
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+            _unitOfWork.Chapters.UpdateRange(filteredChapters);
+        }
+        // Relocating to a chapter between first and last chapter shifts other chapters up and down
         else
         {
-            return BadRequest(new AuthResult()
+            // Filter in chapters at or above destination order number
+            filteredChapters = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber >= chapterForm.OrderNumber) 
+            ).ToList();
+
+            foreach (var c in filteredChapters)
             {
-                Success = false,
-                Messages = new List<string>() { "Could not find chapter to be updated from database" }
-            });
+                c.OrderNumber += 1; // Increment order number to in response to making space for the chapter to be updated
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+            _unitOfWork.Chapters.UpdateRange(filteredChapters);
+
+            // Filter in chapters that are above the updated chapter's original order number but below the destination number
+            var filteredChaptersBelow = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber > updatedChapter.OrderNumber)
+            && (c.OrderNumber < chapterForm.OrderNumber)
+            ).ToList();
+
+            //_unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
         }
+        #endregion
 
-        // Filter in chapters that are above the updated chapter's original order number but below the destination number
-        filteredChapters = allProjectChapters.Where(c =>
-        (c.OrderNumber >= chapterForm.OrderNumber) && (c.ProjectId == chapterForm.ProjectId));
-
-
-
-
-
-
+        // Update the chapter's order number
+        updatedChapter.OrderNumber = chapterForm.OrderNumber;
+        await _unitOfWork.Chapters.UpdateAsync(updatedChapter);
 
         if (!await _unitOfWork.SaveAsync())
         {
@@ -181,9 +210,8 @@ public class ChapterController : ControllerBase
                 Messages = new List<string>() { "Something went wrong while saving" }
             });
         }
-        #endregion
 
-        return Ok(chapterForm);
+        return Ok(updatedChapter);
     }
 
 
