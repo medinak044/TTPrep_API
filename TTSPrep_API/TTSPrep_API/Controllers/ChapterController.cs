@@ -145,7 +145,7 @@ public class ChapterController : ControllerBase
         {
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
-            && (c.OrderNumber < chapterForm.OrderNumber) 
+            && (c.OrderNumber < updatedChapter.OrderNumber) 
             ).ToList();
 
             foreach (var c in filteredChapters)
@@ -161,7 +161,7 @@ public class ChapterController : ControllerBase
         {
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
-            && (c.OrderNumber > chapterForm.OrderNumber)
+            && (c.OrderNumber > updatedChapter.OrderNumber)
             ).ToList();
 
             foreach (var c in filteredChapters)
@@ -172,12 +172,13 @@ public class ChapterController : ControllerBase
             _unitOfWork.Chapters.UpdateRange(filteredChapters);
         }
         // Relocating to a chapter between first and last chapter shifts other chapters up and down
-        else
+        else if (chapterForm.OrderNumber < updatedChapter.OrderNumber)
         {
-            // Filter in chapters at or above destination order number
+            // Filter in chapters at or above destination order number but not above original order number
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
             && (c.OrderNumber >= chapterForm.OrderNumber) 
+            && (c.OrderNumber < updatedChapter.OrderNumber)
             ).ToList();
 
             foreach (var c in filteredChapters)
@@ -194,14 +195,53 @@ public class ChapterController : ControllerBase
             && (c.OrderNumber < chapterForm.OrderNumber)
             ).ToList();
 
-            //_unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
+            foreach (var c in filteredChaptersBelow)
+            {
+                c.OrderNumber -= 1; // Increment order number to in response to making space for the chapter to be updated
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+
+            _unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
+        }
+        // Relocating to a chapter between first and last chapter shifts other chapters up and down
+        else if (chapterForm.OrderNumber > updatedChapter.OrderNumber)
+        {
+            // Filter in chapters at or above destination order number but not above original order number
+            filteredChapters = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber >= chapterForm.OrderNumber)
+            ).ToList();
+
+            foreach (var c in filteredChapters)
+            {
+                c.OrderNumber += 1; // Increment order number to in response to making space for the chapter to be updated
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+            _unitOfWork.Chapters.UpdateRange(filteredChapters);
+
+            // Filter in chapters that are above the updated chapter's original order number but below the destination number
+            var filteredChaptersBelow = allProjectChapters.Where(c =>
+            (c.ProjectId == chapterForm.ProjectId)
+            && (c.OrderNumber > updatedChapter.OrderNumber)
+            && (c.OrderNumber < chapterForm.OrderNumber)
+            ).ToList();
+
+            foreach (var c in filteredChaptersBelow)
+            {
+                c.OrderNumber -= 1; // Increment order number to in response to making space for the chapter to be updated
+                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            }
+
+            _unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
         }
         #endregion
 
         // Update the chapter's order number
         updatedChapter.OrderNumber = chapterForm.OrderNumber;
-        await _unitOfWork.Chapters.UpdateAsync(updatedChapter);
+        updatedChapter.Title = updatedChapter.Title.Equals($"Chapter {updatedChapter.OrderNumber}") 
+            ? updatedChapter.Title : $"Chapter {updatedChapter.OrderNumber}";
 
+        await _unitOfWork.Chapters.UpdateAsync(updatedChapter);
         if (!await _unitOfWork.SaveAsync())
         {
             return BadRequest(new AuthResult()
