@@ -122,26 +122,57 @@ public class ChapterController : ControllerBase
     }
 
     // Call this method first from client before deleting a chapter
-    [HttpPut("UpdateChapterOrderNumber")]
+    [HttpPatch("UpdateChapterOrderNumber")]
     public async Task<ActionResult> UpdateChapterOrderNumber([FromBody] Chapter chapterForm)
     {
-        #region Update order numbers of chapters
-        // Get all the chapters within the same project as the deleted chapter
-        var filteredChapters = _unitOfWork.Chapters.GetSome(c => 
-        (c.OrderNumber > chapterForm.OrderNumber) && (c.Id == chapterForm.ProjectId));
-        // Filter the collection to only have chapters with order numbers greater than deleted chapter
-        foreach (var c in filteredChapters)
+        if (chapterForm.ProjectId.IsNullOrEmpty())
         {
-            c.OrderNumber -= 1; // Decrease order number to fill the space opened by the deleted chapter
-            c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+            return BadRequest(new AuthResult()
+            {
+                Success = false,
+                Messages = new List<string>() { "Missing project id" }
+            });
         }
 
-        //foreach (var c in filteredChapters)
-        //{
-        //    await _unitOfWork.Chapters.UpdateAsync(c);
-        //}
-
+        #region Update order numbers of chapters
+        // Get all the chapters within the same project as the deleted chapter
+        var allProjectChapters = _unitOfWork.Chapters.GetSome(c => c.ProjectId == chapterForm.ProjectId).ToList();
+        // Filter in chapters at or above destination order number
+        var filteredChapters = allProjectChapters.Where(c => 
+        (c.OrderNumber >= chapterForm.OrderNumber) && (c.ProjectId == chapterForm.ProjectId));
+        foreach (var c in filteredChapters)
+        {
+            c.OrderNumber += 1; // Increment order number to in response to making space for the chapter to be updated
+            c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+        }
         _unitOfWork.Chapters.UpdateRange(filteredChapters);
+
+        // Update the chapter's order number
+        var updatedChapter = allProjectChapters.FirstOrDefault(c => c.Id == chapterForm.Id);
+        if (updatedChapter != null)
+        {
+            updatedChapter.OrderNumber = chapterForm.OrderNumber;
+            await _unitOfWork.Chapters.UpdateAsync(updatedChapter);
+        }
+        else
+        {
+            return BadRequest(new AuthResult()
+            {
+                Success = false,
+                Messages = new List<string>() { "Could not find chapter to be updated from database" }
+            });
+        }
+
+        // Filter in chapters that are above the updated chapter's original order number but below the destination number
+        filteredChapters = allProjectChapters.Where(c =>
+        (c.OrderNumber >= chapterForm.OrderNumber) && (c.ProjectId == chapterForm.ProjectId));
+
+
+
+
+
+
+
         if (!await _unitOfWork.SaveAsync())
         {
             return BadRequest(new AuthResult()
@@ -203,6 +234,21 @@ public class ChapterController : ControllerBase
             });
         }
 
+        #region Update order numbers of chapters
+        // Get all the chapters within the same project as the deleted chapter
+        var allProjectChapters = _unitOfWork.Chapters.GetSome(c => c.ProjectId == chapterToBeDeleted.ProjectId).ToList();
+        // Filter the collection to only have chapters with order numbers greater than deleted chapter
+        var filteredChapters = allProjectChapters.Where(c =>
+        (c.OrderNumber > chapterToBeDeleted.OrderNumber) && (c.ProjectId == chapterToBeDeleted.ProjectId));
+        foreach (var c in filteredChapters)
+        {
+            c.OrderNumber -= 1; // Decrease order number to fill the space opened by the deleted chapter
+            c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
+        }
+
+        _unitOfWork.Chapters.UpdateRange(filteredChapters);
+        #endregion
+
         await _unitOfWork.Chapters.RemoveAsync(chapterToBeDeleted);
         if (!await _unitOfWork.SaveAsync())
         {
@@ -212,7 +258,6 @@ public class ChapterController : ControllerBase
                 Messages = new List<string>() { "Something went wrong while saving" }
             });
         }
-
 
         return Ok(chapterToBeDeleted);
     }
