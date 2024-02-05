@@ -136,7 +136,8 @@ public class ChapterController : ControllerBase
 
         #region Update order numbers of chapters
         // Get all the chapters within the same project as the deleted chapter
-        var allProjectChapters = _unitOfWork.Chapters.GetSome(c => c.ProjectId == chapterForm.ProjectId).ToList();
+        var allProjectChapters = _unitOfWork.Chapters.GetSome(c => c.ProjectId == chapterForm.ProjectId)
+            .OrderBy(c => c.OrderNumber).ToList();
         var updatedChapter = allProjectChapters.FirstOrDefault(c => c.Id == chapterForm.Id);
         var filteredChapters = allProjectChapters;
 
@@ -146,7 +147,7 @@ public class ChapterController : ControllerBase
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
             && (c.OrderNumber < updatedChapter.OrderNumber) 
-            ).ToList();
+            ).OrderBy(c => c.OrderNumber).ToList();
 
             foreach (var c in filteredChapters)
             {
@@ -157,12 +158,13 @@ public class ChapterController : ControllerBase
             _unitOfWork.Chapters.UpdateRange(filteredChapters);
         }
         // Relocating to the last chapter shifts down chapters
-        else if (chapterForm.OrderNumber == allProjectChapters.Count)
+        else if (chapterForm.OrderNumber == allProjectChapters.Last().OrderNumber)
         {
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
             && (c.OrderNumber > updatedChapter.OrderNumber)
-            ).ToList();
+            && (c.OrderNumber <= chapterForm.OrderNumber)
+            ).OrderBy(c => c.OrderNumber).ToList();
 
             foreach (var c in filteredChapters)
             {
@@ -179,7 +181,7 @@ public class ChapterController : ControllerBase
             (c.ProjectId == chapterForm.ProjectId)
             && (c.OrderNumber >= chapterForm.OrderNumber) 
             && (c.OrderNumber < updatedChapter.OrderNumber)
-            ).ToList();
+            ).OrderBy(c => c.OrderNumber).ToList();
 
             foreach (var c in filteredChapters)
             {
@@ -187,21 +189,6 @@ public class ChapterController : ControllerBase
                 c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
             }
             _unitOfWork.Chapters.UpdateRange(filteredChapters);
-
-            // Filter in chapters that are above the updated chapter's original order number but below the destination number
-            var filteredChaptersBelow = allProjectChapters.Where(c =>
-            (c.ProjectId == chapterForm.ProjectId)
-            && (c.OrderNumber > updatedChapter.OrderNumber)
-            && (c.OrderNumber < chapterForm.OrderNumber)
-            ).ToList();
-
-            foreach (var c in filteredChaptersBelow)
-            {
-                c.OrderNumber -= 1; // Increment order number to in response to making space for the chapter to be updated
-                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
-            }
-
-            _unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
         }
         // Relocating to a chapter between first and last chapter shifts other chapters up and down
         else if (chapterForm.OrderNumber > updatedChapter.OrderNumber)
@@ -209,30 +196,16 @@ public class ChapterController : ControllerBase
             // Filter in chapters at or above destination order number but not above original order number
             filteredChapters = allProjectChapters.Where(c =>
             (c.ProjectId == chapterForm.ProjectId)
-            && (c.OrderNumber >= chapterForm.OrderNumber)
-            ).ToList();
+            && (c.OrderNumber <= chapterForm.OrderNumber)
+            && (c.OrderNumber > updatedChapter.OrderNumber)
+            ).OrderBy(c => c.OrderNumber).ToList();
 
             foreach (var c in filteredChapters)
-            {
-                c.OrderNumber += 1; // Increment order number to in response to making space for the chapter to be updated
-                c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
-            }
-            _unitOfWork.Chapters.UpdateRange(filteredChapters);
-
-            // Filter in chapters that are above the updated chapter's original order number but below the destination number
-            var filteredChaptersBelow = allProjectChapters.Where(c =>
-            (c.ProjectId == chapterForm.ProjectId)
-            && (c.OrderNumber > updatedChapter.OrderNumber)
-            && (c.OrderNumber < chapterForm.OrderNumber)
-            ).ToList();
-
-            foreach (var c in filteredChaptersBelow)
             {
                 c.OrderNumber -= 1; // Increment order number to in response to making space for the chapter to be updated
                 c.Title = c.Title.Equals($"Chapter {c.OrderNumber}") ? c.Title : $"Chapter {c.OrderNumber}";
             }
-
-            _unitOfWork.Chapters.UpdateRange(filteredChaptersBelow);
+            _unitOfWork.Chapters.UpdateRange(filteredChapters);
         }
         #endregion
 
